@@ -69,6 +69,20 @@
       "addedAt": "2026-02-01T02:17:59.556Z",
       "source": "freenaturestock.com",
       "notes": ""
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mole_Antonelliana_di_sera.jpg",
+      "status": "active",
+      "addedAt": "2026-02-01T02:38:58.911Z",
+      "source": "Wikipedia Commons",
+      "notes": "La Mole Antonelliana di sera, Torino, Italy"
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Museo_de_Historia_Natural%2C_Londres%2C_Inglaterra%2C_2022-11-25%2C_DD_50-52_HDR.jpg",
+      "status": "active",
+      "addedAt": "2026-02-01T02:40:35.753Z",
+      "source": "Wikipedia Commons",
+      "notes": "Blue whale skeleton at the Natural History Museum, London, England\nDiego Delso, delso.photo, License CC BY-SA"
     }
   ]
 }
