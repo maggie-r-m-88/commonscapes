@@ -8,13 +8,6 @@
       "notes": "Thor's Hammer, Bryce Canyon"
     },
     {
-      "url": "https://img.freepik.com/free-photo/aesthetic-retro-vaporwave-landscape_23-2148949194.jpg?w=2000",
-      "status": "active",
-      "addedAt": "2026-02-01T14:15:00Z",
-      "source": "Freepik",
-      "notes": "Vaporwave landscape, retro aesthetic"
-    },
-    {
       "url": "https://upload.wikimedia.org/wikipedia/commons/0/0c/%21MQ_DSF9592-EnhancedAnd2more_fused_1.jpg",
       "status": "active",
       "addedAt": "2026-02-01T01:47:29.976Z",
@@ -83,6 +76,41 @@
       "addedAt": "2026-02-01T02:40:35.753Z",
       "source": "Wikipedia Commons",
       "notes": "Blue whale skeleton at the Natural History Museum, London, England\nDiego Delso, delso.photo, License CC BY-SA"
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/8/80/Pajara_%28Fuerteventura%2C_Spain%29%2C_Mirador_Astron%C3%B3mico_de_Sicasumbre%2C_Ausblick_--_2025_--_7140.jpg",
+      "status": "active",
+      "addedAt": "2026-02-01T02:42:45.130Z",
+      "source": "Wikipedia Commons",
+      "notes": "Dietmar Rabich / Wikimedia Commons / “Pajara (Fuerteventura, Spain), Mirador Astronómico de Sicasumbre, Ausblick -- 2025 -- 7140” / CC BY-SA 4.0"
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/T%C3%BCbingen_-_Altstadt_-_Neckarfront_-_Ansicht_von_Neckarinsel_in_blauer_Stunde_%281%29.jpg",
+      "status": "active",
+      "addedAt": "2026-02-01T02:45:01.028Z",
+      "source": "Wikipedia Commons",
+      "notes": "The Neckarfront in Tübingen, Germany, seen in the blue hour over the river Neckar. At the left the Hölderlinturm, followed by a row of historic town houses, at the top the tower of St. George’s Collegiate Church."
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Baikal_ice_on_sunset.jpg/2560px-Baikal_ice_on_sunset.jpg",
+      "status": "active",
+      "addedAt": "2026-02-01T02:46:38.678Z",
+      "source": "Wikipedia Commons",
+      "notes": "Lake Baikal in winter. Ice ridges near Olkhon island in Pribaikalsky National Park\nBy © Sergey Pesterev / Wikimedia Commons, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=79695687"
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/7/73/2018_-_Ch%C3%A2teau_fort_de_Lourdes.jpg",
+      "status": "active",
+      "addedAt": "2026-02-01T02:50:37.804Z",
+      "source": "Wikpedia Commons",
+      "notes": "Cheateau fort de Lourdes"
+    },
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Vista_de_Sagunto%2C_Espa%C3%B1a%2C_2015-01-03%2C_DD_23-31_HDR_PAN.JPG/2560px-Vista_de_Sagunto%2C_Espa%C3%B1a%2C_2015-01-03%2C_DD_23-31_HDR_PAN.JPG",
+      "status": "active",
+      "addedAt": "2026-02-01T02:54:40.666Z",
+      "source": "Wikipedia Commons",
+      "notes": "Vista de Sagunto, Spain\nBy Diego Delso, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=39920987"
     }
   ]
 }
