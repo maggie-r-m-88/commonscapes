@@ -1,12 +1,33 @@
-const IMAGES: string[] = [
-  "https://img.freepik.com/free-vector/colorful-creepy-creatures-illustration-background_516247-1.jpg?w=2000",
-  "https://picography.co/wp-content/uploads/2024/06/picography-bird-street-art-768x528.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fronalpstock_big.jpg/2048px-Fronalpstock_big.jpg",
-  "https://img.freepik.com/free-photo/aesthetic-retro-vaporwave-landscape_23-2148949194.jpg?w=2000"
-];
+import { promises as fs } from "fs";
+import path from "path";
 
-export async function GET(): Promise<Response> {
-  const image = IMAGES[Math.floor(Math.random() * IMAGES.length)];
+interface ImageEntry {
+  url: string;
+  status: "active" | "inactive";
+  addedAt?: string;
+  source?: string;
+  notes?: string;
+}
+
+export async function GET() {
+  // Path to your JSON file
+  const jsonPath = path.join(process.cwd(), "data", "images.json");
+  
+  // Read and parse JSON
+  const data = await fs.readFile(jsonPath, "utf-8");
+  const images: ImageEntry[] = JSON.parse(data).images;
+
+  // Filter active images
+  const activeImages = images.filter(img => img.status === "active");
+  if (activeImages.length === 0) {
+    return new Response(null, { status: 404 });
+  }
+
+  // Pick a random image
+  const randomIndex = Math.floor(Math.random() * activeImages.length);
+  const image = activeImages[randomIndex].url;
+
+  // Redirect to the image URL
   return new Response(null, {
     status: 302,
     headers: {
