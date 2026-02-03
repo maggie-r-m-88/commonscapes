@@ -1,13 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
-// GET - List all images
-export async function GET() {
+/* --------------------------------------------------
+   GET - List images (server-side pagination + filter)
+--------------------------------------------------- */
+export async function GET(request: NextRequest) {
   try {
-    const { data: images, error } = await supabase
-      .from('images')
-      .select('*')
-      .order('added_at', { ascending: false });
+    const { searchParams } = new URL(request.url);
+
+    const page = Number(searchParams.get("page") || 1);
+    const limit = Number(searchParams.get("limit") || 20);
+    const featured = searchParams.get("featured");
+
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+
+    let query = supabase
+      .from("images")
+      .select("*", { count: "exact" })
+      .order("added_at", { ascending: false })
+      .range(from, to);
+
+    if (featured === "true") {
+      query = query.eq("featured", true);
+    }
+
+    const { data: images, error, count } = await query;
 
     if (error) {
       console.error("Supabase error:", error);
@@ -18,17 +36,23 @@ export async function GET() {
     }
 
     return NextResponse.json(
-      { images: images || [] },
+      {
+        images: images || [],
+        page,
+        limit,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limit),
+      },
       {
         headers: {
-          'Cache-Control': 'no-store, no-cache, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
         },
       }
     );
   } catch (error) {
-    console.error("Error:", error);
+    console.error("GET error:", error);
     return NextResponse.json(
       { error: "Failed to read images" },
       { status: 500 }
@@ -36,7 +60,9 @@ export async function GET() {
   }
 }
 
-// POST - Add new image
+/* --------------------------------------------------
+   POST - Add new image
+--------------------------------------------------- */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -55,10 +81,11 @@ export async function POST(request: NextRequest) {
       categories: body.categories || null,
       description: body.description || null,
       taken_at: body.taken_at || null,
+      featured: body.featured ?? false, // 👈 default
     };
 
     const { data, error } = await supabase
-      .from('images')
+      .from("images")
       .insert([newImage])
       .select()
       .single();
@@ -73,7 +100,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, image: data });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("POST error:", error);
     return NextResponse.json(
       { error: "Failed to add image" },
       { status: 500 }
@@ -81,7 +108,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PUT - Update image
+/* --------------------------------------------------
+   PUT - Update image (supports featured toggle)
+--------------------------------------------------- */
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
@@ -95,9 +124,9 @@ export async function PUT(request: NextRequest) {
     }
 
     const { data, error } = await supabase
-      .from('images')
+      .from("images")
       .update(imageData)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -111,7 +140,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ success: true, image: data });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("PUT error:", error);
     return NextResponse.json(
       { error: "Failed to update image" },
       { status: 500 }
@@ -119,16 +148,15 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// DELETE - Remove image by URL
+/* --------------------------------------------------
+   DELETE - Remove image by URL
+--------------------------------------------------- */
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const url = searchParams.get("url");
 
-    console.log("DELETE request - url:", url);
-
     if (!url) {
-      console.log("Invalid request - no URL provided");
       return NextResponse.json(
         { error: "URL is required" },
         { status: 400 }
@@ -136,9 +164,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { data, error } = await supabase
-      .from('images')
+      .from("images")
       .delete()
-      .eq('url', url)
+      .eq("url", url)
       .select()
       .single();
 
@@ -151,21 +179,18 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (!data) {
-      console.log("Image not found with URL:", url);
       return NextResponse.json(
         { error: "Image not found" },
         { status: 404 }
       );
     }
 
-    console.log("Successfully deleted:", data.url);
     return NextResponse.json({ success: true, deleted: data });
   } catch (error) {
-    console.error("Delete error:", error);
+    console.error("DELETE error:", error);
     return NextResponse.json(
       { error: "Failed to delete image" },
       { status: 500 }
     );
   }
 }
-

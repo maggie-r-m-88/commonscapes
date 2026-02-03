@@ -60,10 +60,16 @@ async function fetchImageInfo(title) {
 
 function extractMetadata(title, imageinfo) {
   const meta = imageinfo?.extmetadata || {};
+
   const userData =  meta.Artist?.value ||
     meta.Author?.value ||
     meta.Credit?.value ||
     'Unknown';
+
+    const infoUrl = title
+    ? `https://commons.wikimedia.org/wiki/File:${title}`
+    : null;
+
   return {
     title,
     url: imageinfo?.url,
@@ -84,6 +90,7 @@ function extractMetadata(title, imageinfo) {
     description: cleanHtml(meta.ImageDescription?.value),
     dateTime: meta.DateTime?.value || '',
     owner: cleanHtml(userData),
+    infoUrl: infoUrl,
   };
 }
 
@@ -169,6 +176,7 @@ export async function importJsonToSupabase() {
       description: img.description,
       categories: img.categories || [],
       owner: img.owner,
+      info_url: img.infoUrl,
     }));
 
     for (const batch of chunkArray(rows, BATCH_SIZE)) {

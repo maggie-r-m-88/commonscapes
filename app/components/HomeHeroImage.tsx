@@ -83,7 +83,7 @@ export default function Home() {
     const [activeTab, setActiveTab] = useState('details');
 
     useEffect(() => {
-        fetch("/api/wallpaper?format=json")
+        fetch("/api/featured?format=json")
             .then((res) => res.json())
             .then(setImage)
             .catch(console.error);
