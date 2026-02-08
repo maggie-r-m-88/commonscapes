@@ -65,7 +65,6 @@ export default function HomeExplore() {
         <div className="bg-white rounded-lg overflow-hidden shadow-md mb-24">
           <div className="relative w-full h-[600px] bg-gray-100">
             <div className="absolute top-6 left-6 bg-white/95 px-4 py-2 rounded text-sm font-medium text-gray-700 backdrop-blur-sm">
-              Featured Image
             </div>
             <Image
               src={hero.url}
