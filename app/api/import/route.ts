@@ -1,183 +1,88 @@
 import { NextResponse } from "next/server";
-import { JSDOM } from "jsdom";
-import { createClient } from "@supabase/supabase-js";
+import { fetchImageInfo, extractMetadata } from "@/lib/wikimedia";
+import { generateTags } from "@/lib/openai-tags";
+import { generateEmbedding } from "@/lib/openai-embed";
+import { supabase } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
-const API_ENDPOINT = "https://commons.wikimedia.org/w/api.php";
-
-console.log("📦 /api/import route loaded");
-
-// --------------------
-// Supabase
-// --------------------
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SECRET_KEY!
-);
-
-console.log("🔌 Supabase client initialized");
-
-// --------------------
-// Types
-// --------------------
-type WikimediaImageInfo = {
-  url: string;
-  width: number;
-  height: number;
-  mime: string;
-  extmetadata?: Record<
-    string,
-    {
-      value?: string;
-    }
-  >;
-};
-
-type ImportRequestBody = {
-  filename: string;
-};
-
-// --------------------
-// Helpers
-// --------------------
-function cleanHtml(html?: string): string {
-  if (!html) return "";
-  return new JSDOM(html).window.document.body.textContent?.trim() ?? "";
-}
-
-function parseCategories(raw?: string): string[] {
-  if (!raw) return [];
-  return raw.split("|").map(c => c.trim()).filter(Boolean);
-}
-
-// --------------------
-// Wikimedia
-// --------------------
-async function fetchImageInfo(
-  filename: string
-): Promise<WikimediaImageInfo | null> {
-  console.log("🌐 Fetching Wikimedia info for:", filename);
-
-  const title = `File:${filename}`;
-  const encoded = encodeURIComponent(title);
-
-  const url =
-    `${API_ENDPOINT}?action=query&titles=${encoded}` +
-    `&prop=imageinfo&iiprop=url|size|dimensions|mime|extmetadata&format=json`;
-
-  console.log("➡️ Wikimedia API URL:", url);
-
-  const res = await fetch(url);
-  console.log("⬅️ Wikimedia response status:", res.status);
-
-  if (!res.ok) {
-    console.warn("⚠️ Wikimedia fetch failed");
-    return null;
-  }
-
-  const data = await res.json();
-  const page = Object.values(data?.query?.pages ?? {})[0] as any;
-
-  if (!page?.imageinfo?.[0]) {
-    console.warn("⚠️ No imageinfo in response");
-    return null;
-  }
-
-  console.log("✅ Wikimedia imageinfo found");
-  return page.imageinfo[0];
-}
-
-function extractMetadata(
-  filename: string,
-  imageinfo: WikimediaImageInfo
-) {
-  console.log("🧩 Extracting metadata for:", filename);
-
-  const meta = imageinfo.extmetadata ?? {};
-
-  const user =
-    meta.Artist?.value ||
-    meta.Author?.value ||
-    meta.Credit?.value ||
-    "Unknown";
-
-  return {
-    title: filename,
-    url: imageinfo.url,
-    width: imageinfo.width,
-    height: imageinfo.height,
-    mime: imageinfo.mime,
-    added_at: new Date().toISOString(),
-    taken_at: meta.DateTime?.value ?? null,
-    source: "Wikimedia Commons",
-    attribution: cleanHtml(user),
-    license_name: meta.LicenseShortName?.value ?? "",
-    license_url: meta.LicenseUrl?.value ?? "",
-    description: cleanHtml(meta.ImageDescription?.value),
-    categories: parseCategories(meta.Categories?.value),
-    owner: cleanHtml(user),
-    info_url: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(
-      filename
-    )}`,
-  };
-}
-
-// --------------------
-// POST /api/import
-// --------------------
 export async function POST(req: Request) {
-  console.log("📥 POST /api/import hit");
-
   try {
-    const body = (await req.json()) as ImportRequestBody;
-    console.log("📨 Request body:", body);
+    console.log("📥 /api/import called");
 
-    if (!body?.filename) {
-      console.warn("⚠️ Missing filename");
-      return NextResponse.json(
-        { error: "Missing filename" },
-        { status: 400 }
-      );
+    const { filename } = await req.json();
+    console.log("📨 Received filename:", filename);
+
+    if (!filename) {
+      console.warn("⚠️ Missing filename in request");
+      return NextResponse.json({ error: 'Missing filename' }, { status: 400 });
     }
 
-    const imageinfo = await fetchImageInfo(body.filename);
-
+    // 1️⃣ Fetch Wikimedia metadata
+    console.log("🌐 Fetching Wikimedia metadata...");
+    const imageinfo = await fetchImageInfo(filename);
     if (!imageinfo) {
-      console.warn("⚠️ No imageinfo returned");
-      return NextResponse.json(
-        { error: "No imageinfo found" },
-        { status: 404 }
-      );
+      console.warn("⚠️ No imageinfo returned from Wikimedia");
+      return NextResponse.json({ error: 'No imageinfo found' }, { status: 404 });
     }
+    console.log("✅ Wikimedia metadata fetched");
 
-    const meta = extractMetadata(body.filename, imageinfo);
-    console.log("🗂 Prepared metadata:", meta);
+    const meta = extractMetadata(filename, imageinfo);
+    console.log("🗂 Extracted metadata:", meta);
 
-    console.log("📤 Upserting into Supabase…");
+    // 2️⃣ Upsert metadata to Supabase
+    // 2️⃣ Upsert metadata to Supabase and get the ID
+    console.log("📤 Upserting metadata to Supabase...");
+    const { data: upsertedRows, error: upsertError } = await supabase
+      .from('images')
+      .upsert(meta, { onConflict: 'url', ignoreDuplicates: false })
+      .select('id');
 
-    const { error } = await supabase
-      .from("images")
-      .upsert(meta, {
-        onConflict: "url",
-        ignoreDuplicates: true,
-      });
-
-    if (error) {
-      console.error("❌ Supabase error:", error);
-      return NextResponse.json(
-        { error: "Database error" },
-        { status: 500 }
-      );
+    if (upsertError) {
+      console.error("❌ Supabase upsert failed:", upsertError);
+      return NextResponse.json({ error: 'DB upsert failed' }, { status: 500 });
     }
+    const imageId = upsertedRows?.[0]?.id;
+    if (!imageId) {
+      console.error("❌ Failed to get image ID after upsert");
+      return NextResponse.json({ error: 'Failed to get image ID' }, { status: 500 });
+    }
+    console.log("✅ Metadata upserted, image ID:", imageId);
 
-    console.log("✅ Import successful");
-    return NextResponse.json({ ok: true });
+    // 3️⃣ Generate tags from OpenAI
+    console.log("🏷 Generating tags with OpenAI...");
+    const tags = await generateTags(meta);
+    console.log(`✅ Tags generated (${tags.length}):`, tags);
+
+    const { error: tagError } = await supabase
+      .from('image_tag_candidates')
+      .insert({ image_id: imageId, image_url: meta.url, tags, model: 'gpt-4.1-mini', prompt_version: 'v1' });
+
+    if (tagError) console.warn("⚠️ Failed to insert tags into Supabase", tagError);
+    else console.log("✅ Tags inserted into Supabase");
+
+
+    // 4️⃣ Combine metadata + tags and create embedding
+    console.log("🧠 Generating embedding for image...");
+    const embeddingText = `${meta.title} ${meta.description} ${meta.categories.join(' ')} ${tags.join(' ')}`;
+    const vector = await generateEmbedding(embeddingText);
+    console.log(`✅ Embedding generated, length: ${vector.length}`);
+
+    // 5️⃣ Save embedding in images table
+    console.log("💾 Saving embedding to Supabase...");
+    const { error: vectorError } = await supabase
+      .from('images')
+      .update({ vector })
+      .eq('url', meta.url);
+
+    if (vectorError) console.warn("⚠️ Failed to save vector in Supabase", vectorError);
+    else console.log("✅ Embedding saved in Supabase");
+
+    console.log("🎉 /api/import finished successfully");
+    return NextResponse.json({ ok: true, meta, tags, vectorLength: vector.length });
+
   } catch (err) {
-    console.error("🔥 Import crashed:", err);
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    console.error("🔥 Pipeline error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
