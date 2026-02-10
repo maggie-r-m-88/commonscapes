@@ -37,7 +37,7 @@ function sleep(ms) {
 async function generateEmbedding(text, attempt = 1) {
   try {
     const response = await openai.embeddings.create({
-      model: 'text-embedding-3-large', // 1536 dimensions
+      model: 'text-embedding-3-large',
       input: text
     });
     return response.data[0].embedding;
@@ -61,11 +61,9 @@ async function run() {
   let failedImages = [];
 
   while (true) {
-    // Fetch canonical text
+    // Fetch images needing vectors using the RPC
     const { data: images, error } = await supabase
-      .from('image_with_canonical_text')
-      .select('image_id, canonical_text')
-      .limit(BATCH_SIZE);
+      .rpc('get_images_to_vector', { batch_size: BATCH_SIZE });
 
     if (error) {
       console.error('❌ Supabase fetch failed:', error);
@@ -84,19 +82,20 @@ async function run() {
         console.log(`🧠 Generating vector for image_id ${image.image_id}`);
         const vector = await generateEmbedding(image.canonical_text);
 
-// Ensure numbers, just in case
-const numericVector = vector.map(Number);
+        // Ensure numbers
+        const numericVector = vector.map(Number);
 
-const { error: updateError } = await supabase
-  .from('images')
-  .update({ vector: numericVector })
-  .eq('id', image.image_id);
+        const { error: updateError } = await supabase
+          .from('images')
+          .update({ vector: numericVector })
+          .eq('id', image.image_id);
 
-if (updateError) {
-  console.error(`❌ Failed to update vector for image_id ${image.image_id}`, updateError);
-} else {
-  console.log(`✅ Vector saved for image_id ${image.image_id}`);
-}
+        if (updateError) {
+          console.error(`❌ Failed to update vector for image_id ${image.image_id}`, updateError);
+          failedImages.push({ id: image.image_id, reason: 'supabase_update', error: updateError });
+        } else {
+          console.log(`✅ Vector saved for image_id ${image.image_id}`);
+        }
 
         await sleep(RATE_LIMIT_MS);
 
