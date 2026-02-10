@@ -18,6 +18,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing filename' }, { status: 400 });
     }
 
+
     // 1️⃣ Fetch Wikimedia metadata
     console.log("🌐 Fetching Wikimedia metadata...");
     const imageinfo = await fetchImageInfo(filename);
@@ -30,8 +31,25 @@ export async function POST(req: Request) {
     const meta = extractMetadata(filename, imageinfo);
     console.log("🗂 Extracted metadata:", meta);
 
-    // 2️⃣ Upsert metadata to Supabase
-    // 2️⃣ Upsert metadata to Supabase and get the ID
+    // Check if the image already exists
+    console.log("🔎 Checking if image already exists in Supabase...");
+    const { data: existingImages, error: checkError } = await supabase
+      .from('images')
+      .select('id')
+      .eq('url', meta.url)
+      .limit(1);
+
+    if (checkError) {
+      console.error("❌ Supabase check failed:", checkError);
+      return NextResponse.json({ error: 'DB check failed' }, { status: 500 });
+    }
+
+    if (existingImages?.length) {
+      console.log(`ℹ️ Image already exists (id: ${existingImages[0].id}), skipping import.`);
+      return NextResponse.json({ ok: true, skipped: true, id: existingImages[0].id });
+    }
+
+    // 2️⃣ Upsert metadata if it doesn’t exist
     console.log("📤 Upserting metadata to Supabase...");
     const { data: upsertedRows, error: upsertError } = await supabase
       .from('images')
@@ -42,12 +60,9 @@ export async function POST(req: Request) {
       console.error("❌ Supabase upsert failed:", upsertError);
       return NextResponse.json({ error: 'DB upsert failed' }, { status: 500 });
     }
+
     const imageId = upsertedRows?.[0]?.id;
-    if (!imageId) {
-      console.error("❌ Failed to get image ID after upsert");
-      return NextResponse.json({ error: 'Failed to get image ID' }, { status: 500 });
-    }
-    console.log("✅ Metadata upserted, image ID:", imageId);
+    console.log(`✅ Metadata upserted, image ID: ${imageId}`);
 
     // 3️⃣ Generate tags from OpenAI
     console.log("🏷 Generating tags with OpenAI...");
