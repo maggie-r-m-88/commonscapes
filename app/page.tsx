@@ -3,6 +3,7 @@ import HomeHeroImage from "./components/HomeFeatured";
 import ExploreCollection from "./components/HomeFeaturedGrid";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { PhotoGrid } from "./components/PhotoGrid";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center font-sans bg-pattern">
@@ -21,6 +22,10 @@ export default function Home() {
             creative projects.
           </p>
         </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-8 w-full">
+        <PhotoGrid />
       </section>
 
       <section className="max-w-7xl mx-auto px-8 w-full">

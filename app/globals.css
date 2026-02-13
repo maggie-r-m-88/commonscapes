@@ -41,4 +41,5 @@ h1, h2, h3, h4, h5, h6 {
 .bg-pattern{
     background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgb(243, 244, 246) 2px, rgb(243, 244, 246) 4px);
 }
+ 
 
