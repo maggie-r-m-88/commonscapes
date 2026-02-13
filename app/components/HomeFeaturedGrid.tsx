@@ -9,6 +9,7 @@ interface ImageData {
   description?: string;
   owner?: string;
   source?: string;
+  title?: string;
 }
 
 interface ImageGridProps {
@@ -16,13 +17,25 @@ interface ImageGridProps {
   images: ImageData[];
 }
 
+
 export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
+
+
+  // Utility to strip file extension for slug
+  const getSlug = (title?: string) => {
+    if (!title) return "";
+    return title.replace(/\.[^/.]+$/, ""); // removes the last file extension like .jpg, .png
+  };
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
       {/* Large featured image in grid */}
       {featuredImage && (
-        <Link href={`/image/${featuredImage.id}`} className="md:col-span-2 md:row-span-2">
-          <div className="grid-item rounded-lg overflow-hidden shadow-md bg-white relative group cursor-pointer h-full transition-all hover:-translate-y-1 hover:shadow-xl">
+        <Link
+          key={featuredImage.id}
+         href={`/image-detail/${featuredImage.id}`} // keep consistent
+          className="md:col-span-2 md:row-span-2"
+        >
+          <div className="grid-item overflow-hidden rounded-sm shadow-md bg-white relative group cursor-pointer h-full transition-all hover:-translate-y-1 hover:shadow-xl">
             <div className="relative h-full min-h-96 bg-gray-100">
               <Image
                 src={featuredImage.url}
@@ -47,7 +60,7 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
       {/* Small grid images */}
       {images.map((image) => (
         <Link key={image.id} href={`/image/${image.id}`}>
-          <div className="grid-item rounded-lg overflow-hidden shadow-md bg-white relative group cursor-pointer transition-all hover:-translate-y-1 hover:shadow-xl">
+          <div className="grid-item overflow-hidden rounded-sm shadow-md bg-white relative group cursor-pointer transition-all hover:-translate-y-1 hover:shadow-xl">
             <div className="relative aspect-[4/3] bg-gray-100">
               <Image
                 src={image.url}
@@ -71,7 +84,7 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
       {/* CTA Card */}
       <Link
         href="/browse"
-        className="grid-item rounded-lg overflow-hidden shadow-md bg-gradient-to-br from-gray-900 to-gray-700 flex items-center justify-center cursor-pointer hover:from-gray-800 hover:to-gray-600 transition-all group"
+        className="grid-item overflow-hidden shadow-md bg-gradient-to-br from-gray-900 to-gray-700 flex items-center justify-center cursor-pointer hover:from-gray-800 hover:to-gray-600 transition-all group"
       >
         <div className="text-center text-white p-6">
           <p className="text-3xl font-light mb-2">1,000+</p>
