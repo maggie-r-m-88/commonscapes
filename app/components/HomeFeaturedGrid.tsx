@@ -42,7 +42,7 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
                 alt={featuredImage.description || ""}
                 fill
                 sizes="(max-width: 768px) 100vw, 66vw"
-                className="object-cover"
+                className="grid-image"
                 priority
                 unoptimized
               />

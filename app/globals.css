@@ -43,3 +43,8 @@ h1, h2, h3, h4, h5, h6 {
 }
  
 
+.grid-image {
+  view-transition-name: grid-image;
+  width: fit-content;
+  object-fit: cover;
+}
