@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from 'next-view-transitions'
 import Image from "next/image";
 
 interface ImageData {
@@ -32,7 +32,7 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
       {featuredImage && (
         <Link
           key={featuredImage.id}
-         href={`/image-detail/${featuredImage.id}`} // keep consistent
+         href={`/images/${featuredImage.id}`}
           className="md:col-span-2 md:row-span-2"
         >
           <div className="grid-item overflow-hidden rounded-sm shadow-md bg-white relative group cursor-pointer h-full transition-all hover:-translate-y-1 hover:shadow-xl">
@@ -59,7 +59,7 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
 
       {/* Small grid images */}
       {images.map((image) => (
-        <Link key={image.id} href={`/image/${image.id}`}>
+        <Link key={image.id} href={`/images/${image.id}`}>
           <div className="grid-item overflow-hidden rounded-sm shadow-md bg-white relative group cursor-pointer transition-all hover:-translate-y-1 hover:shadow-xl">
             <div className="relative aspect-[4/3] bg-gray-100">
               <Image

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ViewTransitions } from 'next-view-transitions'
 import {  Noto_Naskh_Arabic, Noto_Sans, Archivo, Fraunces } from "next/font/google";
 import "./globals.css";
 
@@ -34,11 +35,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+        <ViewTransitions >
       <body
         className={`${archivo.variable} ${fraunces.variable} ${notoNaskhArabic.variable} ${notoSans.variable} antialiased`}
       >
         {children}
       </body>
+      </ViewTransitions>
     </html>
   );
 }
