@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Meta from "./Meta";
 import TagsMeta from "./TagsMeta";
 import ImageGrid from "./HomeFeaturedGrid";
+import { useFeaturedImages } from "@/app/hooks/useFeaturedImages";
 
 interface ImageData {
   id: string | number;
@@ -24,28 +25,10 @@ interface ImageData {
 }
 
 export default function HomeExplore() {
-  const [hero, setHero] = useState<ImageData | null>(null);
-  const [images, setImages] = useState<ImageData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading, error } = useFeaturedImages(5, 2000, 1300);
   const [activeTab, setActiveTab] = useState<"details" | "about" | "tags">("details");
 
-  useEffect(() => {
-    async function fetchImages() {
-      try {
-        const res = await fetch("/api/featured/home?limit=5&heroSize=2000&gridSize=1300", { cache: "no-store" });
-        const data = await res.json();
-        setHero(data.hero || null);
-        setImages(data.images || []);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchImages();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-8 text-center">
@@ -56,6 +39,19 @@ export default function HomeExplore() {
     );
   }
 
+  if (error) {
+    return (
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-8 text-center">
+          <h2 className="text-3xl font-light mb-3 text-gray-900">Explore the collection</h2>
+          <p className="text-gray-600">Failed to load images</p>
+        </div>
+      </section>
+    );
+  }
+
+  const hero = data?.hero || null;
+  const images = data?.images || [];
   const [featuredImage, ...smallImages] = images;
 
   return (
