@@ -45,6 +45,9 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
                 className="grid-image"
                 priority
                 unoptimized
+                  style={{
+                    viewTransitionName: `image-${featuredImage.id}`,
+                  }}
               />
               <div className="absolute inset-0 bg-black/60 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="text-white">
@@ -69,6 +72,9 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
                 sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover"
                 unoptimized
+                  style={{
+                    viewTransitionName: `image-${image.id}`,
+                  }}
               />
               <div className="absolute inset-0 bg-black/60 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="text-white">

@@ -1,5 +1,5 @@
 
-import HomeHeroImage from "./components/HomeFeatured";
+import HomeHeroImage from "./components/HomeHero";
 import ExploreCollection from "./components/HomeFeaturedGrid";
 import Header from "./components/Header";
 import Footer from "./components/Footer";

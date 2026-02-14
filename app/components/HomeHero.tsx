@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Meta from "./Meta";
+import { Link } from 'next-view-transitions'
 import TagsMeta from "./TagsMeta";
 import ImageGrid from "./HomeFeaturedGrid";
 import { useFeaturedImages } from "@/app/hooks/useFeaturedImages";
@@ -58,18 +59,25 @@ export default function HomeExplore() {
     <section className="w-full">
       {/* ---------------- Hero Image ---------------- */}
       {hero && (
+
         <div className="bg-white rounded-sm overflow-hidden shadow-md mb-24">
           <div className="relative w-full h-[600px] bg-gray-100">
             <div className="absolute top-6 left-6 bg-white/95 px-4 py-2 rounded text-sm font-medium text-gray-700 backdrop-blur-sm">
             </div>
-            <Image
-              src={hero.url}
-              alt={hero.description || hero.title || ""}
-              fill
-              className="object-cover"
-              priority
-              unoptimized
-            />
+            <Link
+              key={hero.id}
+              href={`/images/${hero.id}`}
+              className="md:col-span-2 md:row-span-2"
+            >
+              <Image
+                src={hero.url}
+                alt={hero.description || hero.title || ""}
+                fill
+                className="object-cover"
+                priority
+                unoptimized
+              />
+            </Link>
           </div>
 
           <div className="border-b border-gray-200">
@@ -78,9 +86,8 @@ export default function HomeExplore() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab as "details" | "about" | "tags")}
-                  className={`py-4 text-sm font-medium border-b-2 ${
-                    activeTab === tab ? "text-gray-900 border-gray-900" : "text-gray-600 border-transparent"
-                  }`}
+                  className={`py-4 text-sm font-medium border-b-2 ${activeTab === tab ? "text-gray-900 border-gray-900" : "text-gray-600 border-transparent"
+                    }`}
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
@@ -104,6 +111,7 @@ export default function HomeExplore() {
             {activeTab === "tags" && <TagsMeta categories={hero.categories || []} />}
           </div>
         </div>
+
       )}
 
       {/* ---------------- Grid Images ---------------- */}

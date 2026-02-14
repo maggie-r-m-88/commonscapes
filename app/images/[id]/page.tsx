@@ -35,6 +35,9 @@ export default async function ImageDetailPage({ params }: PageProps) {
               className="grid-image"
               priority
               unoptimized
+                style={{
+    viewTransitionName: `image-${image.id}`,
+  }}
             />
           </div>
 
