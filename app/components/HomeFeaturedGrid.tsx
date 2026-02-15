@@ -44,10 +44,16 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
   // Pre-populate React Query cache with grid images
   useEffect(() => {
     if (featuredImage) {
-      queryClient.setQueryData(["image", featuredImage.id], featuredImage);
+      queryClient.setQueryData(["image", String(featuredImage.id)], {
+        ...featuredImage,
+        id: String(featuredImage.id),
+      });
     }
     images.forEach((image) => {
-      queryClient.setQueryData(["image", image.id], image);
+      queryClient.setQueryData(["image", String(image.id)], {
+        ...image,
+        id: String(image.id),
+      });
     });
   }, [featuredImage, images, queryClient]);
   return (

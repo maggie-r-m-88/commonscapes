@@ -20,12 +20,12 @@ interface ImageRow {
 
 export function useImage(id: string | number) {
   const queryClient = useQueryClient();
-  
-  // Check if data is already in cache (from featured grid)
-  const cachedData = queryClient.getQueryData<ImageRow>(["image", id]);
-  
+
+  const key = ["image", String(id)];
+  const cachedData = queryClient.getQueryData<ImageRow>(key);
+
   return useQuery<ImageRow>({
-    queryKey: ["image", id],
+    queryKey: key,
     queryFn: async () => {
       const res = await fetch(`/api/images/${id}`);
       if (!res.ok) {
@@ -33,8 +33,10 @@ export function useImage(id: string | number) {
       }
       return res.json();
     },
-    // Use cached data if available, don't refetch immediately
-    initialData: cachedData,
+    initialData: cachedData ?? undefined,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 }
