@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Meta from "./Meta";
 import { Link } from 'next-view-transitions'
 import TagsMeta from "./TagsMeta";
 import ImageGrid from "./HomeFeaturedGrid";
 import { useFeaturedImages } from "@/app/hooks/useFeaturedImages";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ImageData {
   id: string | number;
@@ -28,6 +29,24 @@ interface ImageData {
 export default function HomeExplore() {
   const { data, isLoading, error } = useFeaturedImages(5, 2000, 1300);
   const [activeTab, setActiveTab] = useState<"details" | "about" | "tags">("details");
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const hero = data?.hero || null;
+    const images = data?.images || [];
+    if (hero) {
+      queryClient.setQueryData(["image", String(hero.id)], {
+        ...hero,
+        id: String(hero.id),
+      });
+    }
+    images.forEach((img) => {
+      queryClient.setQueryData(["image", String(img.id)], {
+        ...img,
+        id: String(img.id),
+      });
+    });
+  }, [data, queryClient]);
 
   if (isLoading) {
     return (
@@ -68,6 +87,9 @@ export default function HomeExplore() {
               key={hero.id}
               href={`/images/${hero.id}`}
               className="md:col-span-2 md:row-span-2"
+              style={{
+                    viewTransitionName: `image-${hero.id}`,
+              }}
             >
               <Image
                 src={hero.url}
