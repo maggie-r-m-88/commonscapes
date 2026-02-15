@@ -47,17 +47,6 @@ h1, h2, h3, h4, h5, h6 {
   width: fit-content;
   object-fit: cover;
 }
-
-
- ::view-transition-old(grid-image) {
-  animation: slideOut 800ms ease forwards;
-}
-
-::view-transition-new(grid-image) {
-  animation: slideIn 800ms ease forwards;
-}
-
-
 @keyframes slideOut {
   from {
     opacity: 1;

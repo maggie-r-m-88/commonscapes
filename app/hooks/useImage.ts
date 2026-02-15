@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface ImageRow {
   id?: number;
@@ -19,6 +19,11 @@ interface ImageRow {
 }
 
 export function useImage(id: string | number) {
+  const queryClient = useQueryClient();
+  
+  // Check if data is already in cache (from featured grid)
+  const cachedData = queryClient.getQueryData<ImageRow>(["image", id]);
+  
   return useQuery<ImageRow>({
     queryKey: ["image", id],
     queryFn: async () => {
@@ -28,5 +33,8 @@ export function useImage(id: string | number) {
       }
       return res.json();
     },
+    // Use cached data if available, don't refetch immediately
+    initialData: cachedData,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

@@ -1,24 +1,29 @@
-import { supabase } from "@/lib/supabase";
-import { notFound } from "next/navigation";
+"use client";
+
+import { useImage } from "@/app/hooks/useImage";
 import Image from "next/image";
 import BackButton from "@/app/components/BackButton";
+import { useParams } from "next/navigation";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
+export default function ImageDetailPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const { data: image, isLoading, error } = useImage(id);
 
-export default async function ImageDetailPage({ params }: PageProps) {
-  const { id } = await params;
-
-  // Fetch image from Supabase
-  const { data: image, error } = await supabase
-    .from("images")
-    .select("*")
-    .eq("id", parseInt(id))
-    .single();
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full bg-gray-100 p-6 flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    );
+  }
 
   if (error || !image) {
-    notFound();
+    return (
+      <div className="min-h-screen w-full bg-gray-100 p-6 flex items-center justify-center">
+        <p className="text-gray-600">Image not found</p>
+      </div>
+    );
   }
 
   return (

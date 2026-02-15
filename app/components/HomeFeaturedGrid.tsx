@@ -2,6 +2,26 @@
 
 import { Link } from 'next-view-transitions'
 import Image from "next/image";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+
+interface ImageRow {
+  id?: number;
+  url: string;
+  title?: string | null;
+  width?: number | null;
+  height?: number | null;
+  mime?: string | null;
+  added_at?: string | null;
+  taken_at?: string | null;
+  source?: string | null;
+  attribution?: string | null;
+  license_name?: string | null;
+  license_url?: string | null;
+  description?: string | null;
+  categories?: any | null;
+  owner?: string | null;
+}
 
 interface ImageData {
   id: string | number;
@@ -19,13 +39,17 @@ interface ImageGridProps {
 
 
 export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
+  const queryClient = useQueryClient();
 
-
-  // Utility to strip file extension for slug
-  const getSlug = (title?: string) => {
-    if (!title) return "";
-    return title.replace(/\.[^/.]+$/, ""); // removes the last file extension like .jpg, .png
-  };
+  // Pre-populate React Query cache with grid images
+  useEffect(() => {
+    if (featuredImage) {
+      queryClient.setQueryData(["image", featuredImage.id], featuredImage);
+    }
+    images.forEach((image) => {
+      queryClient.setQueryData(["image", image.id], image);
+    });
+  }, [featuredImage, images, queryClient]);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
       {/* Large featured image in grid */}
