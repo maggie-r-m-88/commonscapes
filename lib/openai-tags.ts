@@ -52,8 +52,31 @@ JSON array of strings only.
       throw new Error(`OpenAI error ${res.status}: ${text}`);
     }
 
-    const json = await res.json();
-    return JSON.parse(json.choices[0].message.content);
+    const data = (await res.json()) as unknown;
+    // Safely access the choices/message/content path
+    const content =
+      typeof data === 'object' && data !== null && Array.isArray((data as any).choices)
+        ? (data as any).choices?.[0]?.message?.content
+        : undefined;
+
+    if (!content || typeof content !== 'string') {
+      throw new Error('OpenAI response missing content');
+    }
+
+    try {
+      return JSON.parse(content);
+    } catch (e) {
+      // If the assistant returned non-JSON, attempt to extract JSON substring
+      const match = content.match(/\[[\s\S]*\]/);
+      if (match) {
+        try {
+          return JSON.parse(match[0]);
+        } catch (e2) {
+          throw new Error('Failed to parse JSON from OpenAI content');
+        }
+      }
+      throw new Error('Unexpected OpenAI content format');
+    }
   } catch (err) {
     if (attempt <= MAX_RETRIES) {
       await sleep(RATE_LIMIT_MS * attempt);

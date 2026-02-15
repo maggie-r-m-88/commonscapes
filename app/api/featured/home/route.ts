@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     // Remove hero from grid
     const filteredGrid = (gridData || [])
-      .filter((img) => img.id !== heroId)
+      .filter((img: any) => img.id !== heroId)
       .slice(0, limit);
 
     /* ------------------------------
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     };
 
     const hero = heroData ? transformThumbnail(heroData, heroSize) : null;
-    const grid = filteredGrid.map((img) => transformThumbnail(img, gridSize));
+    const grid = filteredGrid.map((img: any) => transformThumbnail(img, gridSize));
 
     return NextResponse.json(
       { hero, images: grid },

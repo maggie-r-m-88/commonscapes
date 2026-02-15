@@ -1,4 +1,4 @@
-import { JSDOM } from 'jsdom';
+// Lightweight HTML cleaner to avoid pulling in JSDOM at build time
 
 export type WikimediaImageInfo = {
   url: string;
@@ -29,7 +29,17 @@ export async function fetchImageInfo(filename: string): Promise<WikimediaImageIn
 
 export function cleanHtml(html?: string) {
   if (!html) return '';
-  return new JSDOM(html).window.document.body.textContent?.trim() ?? '';
+  // Remove tags
+  const withoutTags = html.replace(/<[^>]*>/g, '');
+  // Decode a few common HTML entities
+  const decoded = withoutTags
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+  return decoded.trim();
 }
 
 export function parseCategories(raw?: string) {
