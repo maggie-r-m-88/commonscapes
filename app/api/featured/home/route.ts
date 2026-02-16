@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const limit = Number(searchParams.get("limit") || 5); // number of grid images
     const heroSize = Number(searchParams.get("heroSize") || 2000);
-    const gridSize = Number(searchParams.get("gridSize") || 1300);
+    const gridSize = Number(searchParams.get("gridSize") || 1280);
 
     /* ------------------------------
        1️⃣ Fetch hero image
@@ -49,10 +49,12 @@ export async function GET(request: NextRequest) {
     ------------------------------ */
     const transformThumbnail = (img: any, size: number) => {
       if (!img.url.includes("upload.wikimedia.org")) return img;
-      const match = img.url.match(/\/wikipedia\/commons\/([0-9a-zA-Z])\/([0-9a-zA-Z]+)\/(.+)$/i);
+      // Match: commons/a/ab/Filename.jpg
+      const match = img.url.match(/\/wikipedia\/commons\/([a-z0-9])\/([a-z0-9]{2})\/(.+)$/i);
       if (!match) return img;
-      const [_, firstLetter, subfolder, filename] = match;
-      const thumbUrl = `https://upload.wikimedia.org/wikipedia/commons/thumb/${firstLetter}/${subfolder}/${filename}/${size}px-${filename}`;
+      const [_, first, firstTwo, filename] = match;
+      // Build: commons/thumb/a/ab/Filename.jpg/1280px-Filename.jpg
+      const thumbUrl = `https://upload.wikimedia.org/wikipedia/commons/thumb/${first}/${firstTwo}/${filename}/${size}px-${filename}`;
       return { ...img, url: thumbUrl };
     };
 

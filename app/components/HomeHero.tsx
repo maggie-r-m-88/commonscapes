@@ -27,7 +27,7 @@ interface ImageData {
 }
 
 export default function HomeExplore() {
-  const { data, isLoading, error } = useFeaturedImages(5, 2000, 1300);
+  const { data, isLoading, error } = useFeaturedImages(5, 2000, 1280);
   const [activeTab, setActiveTab] = useState<"details" | "about" | "tags">("details");
   const queryClient = useQueryClient();
 
@@ -87,9 +87,6 @@ export default function HomeExplore() {
               key={hero.id}
               href={`/images/${hero.id}`}
               className="md:col-span-2 md:row-span-2"
-              style={{
-                    viewTransitionName: `image-${hero.id}`,
-              }}
             >
               <Image
                 src={hero.url}
@@ -98,6 +95,9 @@ export default function HomeExplore() {
                 className="object-cover"
                 priority
                 unoptimized
+                              style={{
+                    viewTransitionName: `image-${hero.id}`,
+              }}
               />
             </Link>
           </div>

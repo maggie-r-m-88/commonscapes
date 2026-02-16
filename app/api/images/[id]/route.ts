@@ -1,10 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
-// Convert Wikimedia full-res URL to 1300px thumbnail
+// Convert Wikimedia full-res URL to 1280px thumbnail
 function getOptimizedWikimediaUrl(url: string): string {
   // If it's already a thumb URL with a size, return it unchanged
-  if (url.includes('/wikipedia/commons/thumb/') && /\/1300px-/.test(url)) {
+  if (url.includes('/wikipedia/commons/thumb/') && /\/1280px-/.test(url)) {
     return url;
   }
 
@@ -13,8 +13,8 @@ function getOptimizedWikimediaUrl(url: string): string {
   const m = url.match(/wikipedia\/commons\/([^\/]+)\/([^\/]+)\/(.+)$/i);
   if (m) {
     const [, first, second, filenameWithExt] = m;
-    // Build thumbnail URL: .../thumb/<first>/<second>/<filename.ext>/1300px-<filename.ext>
-    return `https://upload.wikimedia.org/wikipedia/commons/thumb/${first}/${second}/${filenameWithExt}/1300px-${filenameWithExt}`;
+    // Build thumbnail URL: .../thumb/<first>/<second>/<filename.ext>/1280px-<filename.ext>
+    return `https://upload.wikimedia.org/wikipedia/commons/thumb/${first}/${second}/${filenameWithExt}/1280px-${filenameWithExt}`;
   }
 
   return url;
@@ -40,7 +40,7 @@ export async function GET(
       );
     }
 
-    // Optimize the image URL to 1300px thumbnail
+    // Optimize the image URL to 1280px thumbnail
     const optimizedImage = {
       ...image,
       url: getOptimizedWikimediaUrl(image.url),

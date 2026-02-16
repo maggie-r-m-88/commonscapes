@@ -22,7 +22,7 @@ interface FeaturedImagesResponse {
   images: ImageData[];
 }
 
-export function useFeaturedImages(limit = 5, heroSize = 2000, gridSize = 1300) {
+export function useFeaturedImages(limit = 5, heroSize = 2000, gridSize = 1280) {
   return useQuery<FeaturedImagesResponse>({
     queryKey: ["featuredImages", { limit, heroSize, gridSize }],
     queryFn: async () => {
