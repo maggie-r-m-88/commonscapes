@@ -97,6 +97,7 @@ export default function HomeExplore() {
                 unoptimized
                               style={{
                     viewTransitionName: `image-${hero.id}`,
+                             willChange: "transform",
               }}
               />
             </Link>

@@ -23,9 +23,8 @@
   font-family: var(--font-archivo);
 }
 
-.font-fraunces {
-  font-family: var(--font-fraunces);
-}
+
+
 
 
 body {
@@ -47,24 +46,14 @@ h1, h2, h3, h4, h5, h6 {
   width: fit-content;
   object-fit: cover;
 }
-@keyframes slideOut {
-  from {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-100px, 0);
-  }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translate(100px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-} 
+::view-transition-group(*) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+}
