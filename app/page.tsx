@@ -1,14 +1,9 @@
 
 import HomeHeroImage from "./components/HomeHero";
-import ExploreCollection from "./components/HomeFeaturedGrid";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center font-sans bg-pattern">
-      
-      <Header />
-
       <section className="py-16 text-center w-full">
         <div className="max-w-7xl mx-auto px-6">
           <h1 className="text-5xl leading-tight mb-6 text-gray-900">
@@ -101,7 +96,6 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

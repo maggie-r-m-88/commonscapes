@@ -1,8 +1,11 @@
+
 import type { Metadata } from "next";
 import { ViewTransitions } from 'next-view-transitions'
 import {  Noto_Naskh_Arabic, Noto_Sans, Archivo } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 
 const notoNaskhArabic = Noto_Naskh_Arabic({
@@ -34,11 +37,15 @@ export default function RootLayout({
   return (
     <html lang="en">
         <ViewTransitions >
-      <body
-        className={`${archivo.variable} ${notoNaskhArabic.variable} ${notoSans.variable} antialiased`}
-      >
-        <Providers>{children}</Providers>
-      </body>
+          <body
+            className={`${archivo.variable} ${notoNaskhArabic.variable} ${notoSans.variable} antialiased`}
+          >
+            <Providers>
+              <Header />
+              {children}
+              <Footer />
+            </Providers>
+          </body>
       </ViewTransitions>
     </html>
   );
