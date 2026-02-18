@@ -5,11 +5,35 @@ import Image from "next/image";
 import BackButton from "@/app/components/BackButton";
 import { useParams } from "next/navigation";
 import { removeFilename } from "@/lib/remove-filename";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+interface TagData {
+  id: number;
+  tag: string;
+  source: string;
+}
 
 export default function ImageDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const { data: image, isLoading, error } = useImage(id);
+  const [tags, setTags] = useState<TagData[]>([]);
+  const [tagsLoading, setTagsLoading] = useState(false);
+
+  // Fetch tags separately from the image
+  useEffect(() => {
+    if (!id) return;
+    
+    setTagsLoading(true);
+    fetch(`/api/images/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setTags(data.tags || []);
+      })
+      .catch(err => console.error("Failed to fetch tags:", err))
+      .finally(() => setTagsLoading(false));
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -40,7 +64,7 @@ export default function ImageDetailPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="lg:w-72 flex-shrink-0">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-y-auto max-h-[calc(100vh-6rem)]">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-bold text-gray-900 break-words">{imageTitle}</h2>
               </div>
@@ -114,14 +138,18 @@ export default function ImageDetailPage() {
                 </div>
               )}
 
-              {image.tags && image.tags.length > 0 && (
+              {tags && tags.length > 0 && (
               <div className="p-6 border-b border-gray-200">
                 <div className="text-xs uppercase text-gray-500 mb-4">Tags</div>
                 <div className="flex flex-wrap gap-2">
-                  {image.tags.map(t => (
-                    <span key={t.id} className="px-2 py-1 bg-[#f3f4f6] rounded-full text-xs">
+                  {tags.map((t) => (
+                    <Link
+                      key={t.id}
+                      href={`/images/tags/${encodeURIComponent(t.tag)}`} // encode for URL safety
+                      className="px-2 py-1 bg-[#f3f4f6] rounded-full text-xs hover:bg-gray-300 transition-colors"
+                    >
                       {t.tag}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               </div>
