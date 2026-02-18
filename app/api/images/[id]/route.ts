@@ -27,6 +27,7 @@ export async function GET(
   const { id } = await params;
 
   try {
+    // 1️⃣ Fetch image
     const { data: image, error } = await supabase
       .from("images")
       .select("*")
@@ -34,23 +35,29 @@ export async function GET(
       .single();
 
     if (error || !image) {
-      return NextResponse.json(
-        { error: "Image not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Image not found" }, { status: 404 });
     }
 
-    // Optimize the image URL to 1280px thumbnail
+    // 2️⃣ Fetch associated tags
+    const { data: tags, error: tagsError } = await supabase
+      .from("image_tag_working")
+      .select("id, tag, source")
+      .eq("image_id", parseInt(id, 10))
+      .order("tag", { ascending: true });
+
+    if (tagsError) console.warn("Failed to fetch tags", tagsError);
+
+    // 3️⃣ Build optimized image object
     const optimizedImage = {
       ...image,
       url: getOptimizedWikimediaUrl(image.url),
+      tags: tags || [],
     };
 
     return NextResponse.json(optimizedImage);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch image" },
-      { status: 500 }
-    );
+    console.error(error);
+    return NextResponse.json({ error: "Failed to fetch image" }, { status: 500 });
   }
 }
+

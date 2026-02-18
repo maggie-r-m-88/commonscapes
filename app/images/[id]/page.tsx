@@ -114,6 +114,20 @@ export default function ImageDetailPage() {
                 </div>
               )}
 
+              {image.tags && image.tags.length > 0 && (
+              <div className="p-6 border-b border-gray-200">
+                <div className="text-xs uppercase text-gray-500 mb-4">Tags</div>
+                <div className="flex flex-wrap gap-2">
+                  {image.tags.map(t => (
+                    <span key={t.id} className="px-2 py-1 bg-[#f3f4f6] rounded-full text-xs">
+                      {t.tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+
             </div>
           </aside>
 

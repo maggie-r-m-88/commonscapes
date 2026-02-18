@@ -16,6 +16,7 @@ interface ImageRow {
   description?: string | null;
   categories?: any | null;
   owner?: string | null;
+  tags?: { id: number; tag: string; source: string; idx: number }[];
 }
 
 export function useImage(id: string | number) {
