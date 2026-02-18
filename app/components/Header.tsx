@@ -4,20 +4,27 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-8">
         <div className="flex items-center text-gray-600">
 
-          {/* GALLERY ICON - font-archivo */}
-          <svg className="" width="32" height="32" viewBox="0 0 40 40" fill="none">
-  {/* Top-left - FILLED */}
-  <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" opacity="0.8" />
-  <rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-  {/* Top-right */}
-  <rect x="22" y="6" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-  {/* Bottom-left */}
-  <rect x="6" y="22" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-  {/* Bottom-right - FILLED */}
-  <rect x="22" y="22" width="12" height="12" rx="2" fill="currentColor" opacity="0.8" />
-  <rect x="22" y="22" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-</svg>
+          {/* ISOMETRIC */}
+          <svg version="1.1" width="50px" height="50px" >
+            <g><path  fill="#b06b2a" d="M 18.5,5.5 C 22.1667,8.5 25.5,11.8333 28.5,15.5C 28.631,16.2389 28.4643,16.9056 28,17.5C 24.7026,19.7954 21.7026,22.462 19,25.5C 18.5004,18.8417 18.3337,12.175 18.5,5.5 Z"/></g>
+            <g><path  fill="#f69a3d" d="M 18.5,5.5 C 18.3337,12.175 18.5004,18.8417 19,25.5C 21.7026,22.462 24.7026,19.7954 28,17.5C 28.4643,16.9056 28.631,16.2389 28.5,15.5C 29.1667,15.1667 29.8333,14.8333 30.5,14.5C 30.5,22.1667 30.5,29.8333 30.5,37.5C 30.5,37.8333 30.5,38.1667 30.5,38.5C 21.1667,33.1667 11.8333,27.8333 2.5,22.5C 7.1072,16.2238 12.4405,10.5572 18.5,5.5 Z"/></g>
+            <g><path  fill="#ae6a2a" d="M 30.5,14.5 C 36.5357,18.8728 41.8691,23.8728 46.5,29.5C 41.1667,32.1667 35.8333,34.8333 30.5,37.5C 30.5,29.8333 30.5,22.1667 30.5,14.5 Z"/></g>
+            <g><path  fill="#6aec6e" d="M 2.5,22.5 C 11.8333,27.8333 21.1667,33.1667 30.5,38.5C 30.7678,40.099 30.4345,41.4324 29.5,42.5C 20.7264,37.9444 12.0597,33.1111 3.5,28C 2.59391,26.3005 2.26057,24.4672 2.5,22.5 Z"/></g>
+            <g><path  fill="#50a84d" d="M 46.5,29.5 C 46.7394,31.4672 46.4061,33.3005 45.5,35C 40.5,37.8333 35.5,40.6667 30.5,43.5C 29.8933,43.3764 29.56,43.0431 29.5,42.5C 30.4345,41.4324 30.7678,40.099 30.5,38.5C 30.5,38.1667 30.5,37.8333 30.5,37.5C 35.8333,34.8333 41.1667,32.1667 46.5,29.5 Z"/></g>
+            </svg>
+          
+          <div className="logo text-2xl font-bold font-archivo tracking-[-0.02em]">
+            Commonscapes
+          </div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-8">
+        <div className="flex items-center text-gray-600">
 
+          {/* TIERRA ICON - font-archivo */}
+          <svg  width="50" height="50" viewBox="0, 0, 400,400"><g id="svgg"><path id="path0" d="M96.920 143.661 C 74.551 188.299,56.250 226.268,56.250 228.036 C 56.250 229.804,105.658 231.250,166.045 231.250 L 275.839 231.250 237.001 157.813 C 167.755 26.879,156.032 25.695,96.920 143.661 M231.801 89.961 C 216.001 108.999,292.531 231.105,320.313 231.184 C 349.537 231.266,349.944 234.554,311.875 163.020 C 268.009 80.596,251.827 65.831,231.801 89.961 M51.380 285.312 C 55.707 337.482,55.757 337.500,200.000 337.500 C 344.243 337.500,344.293 337.482,348.620 285.312 L 351.548 250.000 200.000 250.000 L 48.452 250.000 51.380 285.312 " stroke="none" fill="#000000" fill-rule="evenodd"></path></g></svg>
+    
+          
           <div className="logo text-2xl font-bold font-archivo tracking-[-0.02em]">
             Commonscapes
           </div>
