@@ -55,7 +55,7 @@ export async function GET(
           const match = img.url.match(/\/wikipedia\/commons\/([a-z0-9])\/([a-z0-9]{2})\/(.+)$/i);
           if (match) {
             const [, first, firstTwo, filename] = match;
-            transformedUrl = `https://upload.wikimedia.org/wikipedia/commons/thumb/${first}/${firstTwo}/${filename}/1200px-${filename}`;
+            transformedUrl = `https://upload.wikimedia.org/wikipedia/commons/thumb/${first}/${firstTwo}/${filename}/1280px-${filename}`;
           }
         }
 

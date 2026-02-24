@@ -2,7 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 import { useParams } from "next/navigation";
 
 interface ImageData {

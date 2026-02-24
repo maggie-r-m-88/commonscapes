@@ -24,7 +24,7 @@ export default function ImageDetailPage() {
   // Fetch tags separately from the image
   useEffect(() => {
     if (!id) return;
-    
+
     setTagsLoading(true);
     fetch(`/api/images/${id}`)
       .then(res => res.json())
@@ -56,40 +56,64 @@ export default function ImageDetailPage() {
   return (
 
     <div className="min-h-screen w-full bg-gray-50 p-6">
-      <header className="">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-4">
-          <BackButton />
-        </div>
-      </header>
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="lg:w-72 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="p-6 border-b border-gray-200">
+              {/*               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-bold text-gray-900 break-words">{imageTitle}</h2>
-              </div>
+              </div> */}
 
-              {image.info_url && (
+              {tags && tags.length > 0 && (
                 <div className="p-6 border-b border-gray-200">
+                  <div className="text-xs uppercase text-gray-500 mb-4">Tags</div>
+                  <div className="flex flex-wrap gap-2">
+                    {tags.map((t) => (
+                      <Link
+                        key={t.id}
+                        href={`/images/tags/${encodeURIComponent(t.tag)}`} // encode for URL safety
+                        className="px-2 py-1 bg-[#f3f4f6] rounded-full text-xs hover:bg-gray-300 transition-colors"
+                      >
+                        {t.tag}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+
+               
+                <div className="p-6 border-b border-gray-200 text-center">
+                  <div className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors">
+                      <BackButton />
+                  </div>
+                 
                   <a
                     href={image.info_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                   >
-                    <span>View on Wikimedia Commons</span>
+                    <span>View Source</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                   </a>
                 </div>
+              
+              {image.description && (
+                <div className="p-6 border-b border-gray-200">
+                  <div className="text-xs uppercase text-gray-500 mb-2">Description</div>
+                  <p className="text-gray-700 text-sm leading-relaxed">{image.description}</p>
+                </div>
               )}
+
 
               <div className="p-6 border-b border-gray-200 space-y-4">
                 {image.attribution && (
                   <div>
                     <div className="text-xs uppercase text-gray-500 mb-1">Creator</div>
-                    <div className="text-gray-900 font-medium">{image.owner}</div>
+                    <div className="text-gray-700">{image.owner}</div>
                   </div>
                 )}
                 {image.license_name && (
@@ -103,17 +127,10 @@ export default function ImageDetailPage() {
                 {image.source && (
                   <div>
                     <div className="text-xs uppercase text-gray-500 mb-1">Source</div>
-                    <div className="text-gray-900">{image.source}</div>
+                    <div className="text-gray-700">{image.source}</div>
                   </div>
                 )}
               </div>
-
-              {image.description && (
-                <div className="p-6 border-b border-gray-200">
-                  <div className="text-xs uppercase text-gray-500 mb-2">Description</div>
-                  <p className="text-gray-700 text-sm leading-relaxed">{image.description}</p>
-                </div>
-              )}
 
               {image.width && (
                 <div className="p-6 border-b border-gray-200">
@@ -137,23 +154,6 @@ export default function ImageDetailPage() {
                   </div>
                 </div>
               )}
-
-              {tags && tags.length > 0 && (
-              <div className="p-6 border-b border-gray-200">
-                <div className="text-xs uppercase text-gray-500 mb-4">Tags</div>
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((t) => (
-                    <Link
-                      key={t.id}
-                      href={`/images/tags/${encodeURIComponent(t.tag)}`} // encode for URL safety
-                      className="px-2 py-1 bg-[#f3f4f6] rounded-full text-xs hover:bg-gray-300 transition-colors"
-                    >
-                      {t.tag}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
 
 
             </div>
