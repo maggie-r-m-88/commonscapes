@@ -82,25 +82,25 @@ export default function ImageDetailPage() {
               )}
 
 
-               
-                <div className="p-6 border-b border-gray-200 text-center">
-                  <div className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors">
-                      <BackButton />
-                  </div>
-                 
-                  <a
-                    href={image.info_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                  >
-                    <span>View Source</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
+
+              <div className="p-6 border-b border-gray-200 text-center">
+                <div className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors">
+                  <BackButton />
                 </div>
-              
+                {image.info_url && (<a
+                  href={image.info_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
+                  <span>View Source</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>)}
+
+              </div>
+
               {image.description && (
                 <div className="p-6 border-b border-gray-200">
                   <div className="text-xs uppercase text-gray-500 mb-2">Description</div>
@@ -116,10 +116,15 @@ export default function ImageDetailPage() {
                     <div className="text-gray-700">{image.owner}</div>
                   </div>
                 )}
-                {image.license_name && (
+                {image.license_name && image.license_url && (
                   <div>
                     <div className="text-xs uppercase text-gray-500 mb-1">License</div>
-                    <a href={image.license_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">
+                    <a
+                      href={image.license_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline font-medium"
+                    >
                       {image.license_name}
                     </a>
                   </div>

@@ -34,7 +34,7 @@ export default function TagPage() {
       );
       return res.json();
     },
-    keepPreviousData: true,
+    placeholderData: (prev) => prev
   });
 
   if (isLoading)

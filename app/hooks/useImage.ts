@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 interface ImageRow {
   id?: number;
   url: string;
+  info_url?: string;
   title?: string | null;
   width?: number | null;
   height?: number | null;
