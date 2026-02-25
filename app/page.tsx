@@ -4,12 +4,12 @@ import HomeHeroImage from "./components/HomeHero";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center font-sans bg-pattern">
-      <section className="py-16 text-center w-full">
+      <section className="py-12 text-center w-full">
         <div className="max-w-7xl mx-auto px-6">
           <h1 className="text-5xl leading-tight mb-6 text-gray-900">
             Handpicked visuals from<br />open cultural archives
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
             A curated image library built from Wikimedia Commons and other freely
             licensed sources. Every image is hand-selected for quality, aesthetics,
             and visual impact. Perfect for wallpapers, ambient displays, and
