@@ -26,25 +26,30 @@ export async function GET(
 
     // 2️⃣ Find closest images to category vector
     const { data: images, error: imageError } = await supabase.rpc(
-      "get_closest_images",
-      {
-        category_vector: category.vector,
-        limit_count: pageSize,
-        offset_count: (page - 1) * pageSize,
-      }
-    );
-    
+  "get_closest_images",
+  {
+    category_vector: category.vector,
+    similarity_threshold: 0.25, // tweak this
+    limit_count: pageSize,
+    offset_count: (page - 1) * pageSize,
+  }
+);
 
-    if (imageError) {
-      return NextResponse.json({ error: "Failed to fetch images" }, { status: 500 });
-    }
+if (imageError) {
+  return NextResponse.json(
+    { error: "Failed to fetch images" },
+    { status: 500 }
+  );
+}
 
-    return NextResponse.json({
-      images: images || [],
-      page,
-      pageSize,
-      total: images?.length || 0,
-    });
+const total = images?.[0]?.total_count || 0;
+
+return NextResponse.json({
+  images: images || [],
+  page,
+  pageSize,
+  total,
+});
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
