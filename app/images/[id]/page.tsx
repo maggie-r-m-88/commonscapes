@@ -6,7 +6,7 @@ import BackButton from "@/app/components/BackButton";
 import { useParams } from "next/navigation";
 import { removeFilename } from "@/lib/remove-filename";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 interface TagData {
   id: number;
@@ -14,25 +14,47 @@ interface TagData {
   source: string;
 }
 
+interface RelatedImage {
+  id: number;
+  url: string;
+  title?: string;
+  width?: number;
+  height?: number;
+  description?: string;
+}
+
 export default function ImageDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const { data: image, isLoading, error } = useImage(id);
+
   const [tags, setTags] = useState<TagData[]>([]);
   const [tagsLoading, setTagsLoading] = useState(false);
+  const [relatedImages, setRelatedImages] = useState<RelatedImage[]>([]);
+  const [relatedLoading, setRelatedLoading] = useState(false);
 
-  // Fetch tags separately from the image
+  // Fetch tags
   useEffect(() => {
     if (!id) return;
 
     setTagsLoading(true);
     fetch(`/api/images/${id}`)
       .then(res => res.json())
-      .then(data => {
-        setTags(data.tags || []);
-      })
+      .then(data => setTags(data.tags || []))
       .catch(err => console.error("Failed to fetch tags:", err))
       .finally(() => setTagsLoading(false));
+  }, [id]);
+
+  // Fetch related images
+  useEffect(() => {
+    if (!id) return;
+
+    setRelatedLoading(true);
+    fetch(`/api/images/${id}/related`)
+      .then(res => res.json())
+      .then(data => setRelatedImages(data || []))
+      .catch(err => console.error("Failed to fetch related images:", err))
+      .finally(() => setRelatedLoading(false));
   }, [id]);
 
   if (isLoading) {
@@ -54,16 +76,11 @@ export default function ImageDetailPage() {
   const imageTitle = image.title ? removeFilename(image.title) : "Untitled";
 
   return (
-
     <div className="min-h-screen w-full bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="lg:w-72 flex-shrink-0">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              {/*               <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-bold text-gray-900 break-words">{imageTitle}</h2>
-              </div> */}
-
               {tags && tags.length > 0 && (
                 <div className="p-6 border-b border-gray-200">
                   <div className="text-xs uppercase text-gray-500 mb-4">Tags</div>
@@ -71,7 +88,7 @@ export default function ImageDetailPage() {
                     {tags.map((t) => (
                       <Link
                         key={t.id}
-                        href={`/images/tags/${encodeURIComponent(t.tag)}`} // encode for URL safety
+                        href={`/images/tags/${encodeURIComponent(t.tag)}`}
                         className="px-2 py-1 bg-[#f3f4f6] rounded-full text-xs hover:bg-gray-300 transition-colors"
                       >
                         {t.tag}
@@ -81,24 +98,23 @@ export default function ImageDetailPage() {
                 </div>
               )}
 
-
-
               <div className="p-6 border-b border-gray-200 text-center">
                 <div className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg transition-colors">
                   <BackButton />
                 </div>
-                {image.info_url && (<a
-                  href={image.info_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                  <span>View Source</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>)}
-
+                {image.info_url && (
+                  <a
+                    href={image.info_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mt-2"
+                  >
+                    <span>View Source</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                )}
               </div>
 
               {image.description && (
@@ -107,7 +123,6 @@ export default function ImageDetailPage() {
                   <p className="text-gray-700 text-sm leading-relaxed">{image.description}</p>
                 </div>
               )}
-
 
               <div className="p-6 border-b border-gray-200 space-y-4">
                 {image.attribution && (
@@ -155,15 +170,11 @@ export default function ImageDetailPage() {
                     </div>
                     <div className="text-left font-medium text-gray-500">Format</div>
                     <div className="text-right text-gray-700">{image.mime}</div>
-
                   </div>
                 </div>
               )}
-
-
             </div>
           </aside>
-
 
           <main className="flex-1 min-w-0">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -176,17 +187,41 @@ export default function ImageDetailPage() {
                     className="object-cover"
                     unoptimized
                     priority
-                    style={{
-                      viewTransitionName: `image-${image.id}`,
-                    }}
+                    style={{ viewTransitionName: `image-${image.id}` }}
                   />
                 </div>
               </div>
             </div>
+
+            <div className="my-8">
+              <h2 className="text-lg font-bold text-gray-900 break-words">Related Images</h2>
+            </div>
+
+            {relatedLoading ? (
+              <p className="text-gray-500">Loading related images...</p>
+            ) : relatedImages.length === 0 ? (
+              <p className="text-gray-500">No related images found.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {relatedImages.map((rel) => (
+                  <Link key={rel.id} href={`/images/${rel.id}`}>
+                    <div className="relative w-full h-48 rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow bg-gray-100">
+                      <Image
+                        src={rel.url}
+                        alt={rel.title || "Related image"}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                        style={{ viewTransitionName: `image-${rel.id}` }}
+                      />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </main>
         </div>
       </div>
     </div>
-
   );
 }
