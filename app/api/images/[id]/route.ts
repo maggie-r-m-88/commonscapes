@@ -1,19 +1,14 @@
+"use server";
+
 import { supabase } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 
-// Convert Wikimedia full-res URL to 1280px thumbnail
 function getOptimizedWikimediaUrl(url: string): string {
-  // If it's already a thumb URL with a size, return it unchanged
-  if (url.includes('/wikipedia/commons/thumb/') && /\/1280px-/.test(url)) {
-    return url;
-  }
+  if (url.includes("/wikipedia/commons/thumb/") && /\/1280px-/.test(url)) return url;
 
-  // Match a full-res commons path like:
-  // https://upload.wikimedia.org/wikipedia/commons/f/f0/Filename.JPG
   const m = url.match(/wikipedia\/commons\/([^\/]+)\/([^\/]+)\/(.+)$/i);
   if (m) {
     const [, first, second, filenameWithExt] = m;
-    // Build thumbnail URL: .../thumb/<first>/<second>/<filename.ext>/1280px-<filename.ext>
     return `https://upload.wikimedia.org/wikipedia/commons/thumb/${first}/${second}/${filenameWithExt}/1280px-${filenameWithExt}`;
   }
 
@@ -27,7 +22,6 @@ export async function GET(
   const { id } = await params;
 
   try {
-    // 1️⃣ Fetch image
     const { data: image, error } = await supabase
       .from("images")
       .select("*")
@@ -38,39 +32,12 @@ export async function GET(
       return NextResponse.json({ error: "Image not found" }, { status: 404 });
     }
 
-    // 2️⃣ Fetch associated tags
-    const { data: tags, error: tagsError } = await supabase
-      .from("image_tag_working")
-      .select("id, tag, source")
-      .eq("image_id", parseInt(id, 10))
-      .order("tag", { ascending: true });
-
-    if (tagsError) console.warn("Failed to fetch tags", tagsError);
-
-    // 3 Fetch related categories (max 2, with similarity check)
-/*     // 3️⃣ Fetch related categories using RPC
-    const { data: categories, error: catError } = await supabase.rpc('get_closest_categories', {
-      image_vector: image.vector,
-      limit_count: 2, // max 2 categories
-    });
-
-    if (catError) console.warn("Failed to fetch categories", catError); */
-
-    // Optional: filter by similarity threshold (e.g., distance <= 1)
-    //const SIMILARITY_THRESHOLD = 1;
-    //const filteredCategories = categories?.filter(cat => cat.distance <= SIMILARITY_THRESHOLD) ?? [];
-    // 4 Build optimized image object
-    const optimizedImage = {
+    return NextResponse.json({
       ...image,
       url: getOptimizedWikimediaUrl(image.url),
-      tags: tags || [],
-  //    taxonomy: filteredCategories || [],
-    };
-
-    return NextResponse.json(optimizedImage);
-  } catch (error) {
-    console.error(error);
+    });
+  } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: "Failed to fetch image" }, { status: 500 });
   }
 }
-

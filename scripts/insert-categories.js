@@ -1,70 +1,99 @@
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
+import fetch from 'node-fetch';
 
+// --------------------
+// Config
+// --------------------
+const RATE_LIMIT_MS = 1000; // ms between API calls to avoid rate limits
+const BATCH_SIZE = 10;      // how many categories to process per batch
+
+// --------------------
+// Supabase
+// --------------------
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SECRET_KEY
 );
 
-const categories = [
-  // -------------------- Architecture --------------------
-  { name: 'Architecture', parent_id: null, description: 'Buildings, bridges, monuments, city skylines, man-made structures, architectural elements' },
-  { name: 'Cityscapes', parent_id: 1, description: 'Urban streets, city skylines, city views, architectural landscapes' },
-  { name: 'Buildings', parent_id: 1, description: 'Individual buildings, houses, skyscrapers, temples, castles' },
-  { name: 'Bridges', parent_id: 1, description: 'Bridges of all kinds, spanning rivers or valleys, urban or rural' },
-  { name: 'Monuments', parent_id: 1, description: 'Statues, memorials, historic monuments, iconic structures' },
+// --------------------
+// OpenAI
+// --------------------
+const OPENAI_URL = 'https://api.openai.com/v1/embeddings';
+const OPENAI_MODEL = 'text-embedding-3-large';
 
-  // -------------------- Landscapes --------------------
-  { name: 'Landscapes', parent_id: null, description: 'Natural outdoor environments, wide vistas, terrain, scenery' },
-  { name: 'Mountains', parent_id: 6, description: 'Mountain ranges, hills, peaks, natural highlands' },
-  { name: 'Desert', parent_id: 6, description: 'Sand dunes, arid landscapes, deserts, dry terrain' },
-  { name: 'Jungle', parent_id: 6, description: 'Dense tropical forests, jungles, exotic vegetation' },
-  { name: 'Forest', parent_id: 6, description: 'Wooded areas, trees, greenery, temperate forests' },
-  { name: 'Coast/Beach', parent_id: 6, description: 'Beaches, coastlines, shoreline, ocean views' },
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
 
-  // -------------------- Water / Seascapes --------------------
-  { name: 'Water/Seascapes', parent_id: null, description: 'Bodies of water, oceans, rivers, lakes, seascapes, aquatic environments' },
-  { name: 'Rivers/Lakes', parent_id: 12, description: 'Freshwater rivers, lakes, ponds, streams' },
-  { name: 'Ocean/Sea', parent_id: 12, description: 'Oceans, seas, coastal waters, open water views' },
+// --------------------
+// Generate embedding for a text
+// --------------------
+async function generateEmbedding(text) {
+  const res = await fetch(OPENAI_URL, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: OPENAI_MODEL,
+      input: text
+    })
+  });
 
-  // -------------------- Animals --------------------
-  { name: 'Animals', parent_id: null, description: 'Living creatures, wildlife, fauna, land or water animals' },
-  { name: 'Land Animals', parent_id: 15, description: 'Mammals, reptiles, birds, insects, terrestrial wildlife' },
-  { name: 'Water Animals', parent_id: 15, description: 'Fish, marine mammals, amphibians, aquatic wildlife' },
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`OpenAI embedding error: ${res.status} ${body}`);
+  }
 
-  // -------------------- Plants --------------------
-  { name: 'Plants', parent_id: null, description: 'Vegetation, flora, plants, trees, flowers, greenery' },
-  { name: 'Trees', parent_id: 18, description: 'Individual or grouped trees, forests, woods' },
-  { name: 'Flowers', parent_id: 18, description: 'Flowers, blossoms, floral arrangements, flowering plants' },
-  { name: 'General Vegetation', parent_id: 18, description: 'Grass, shrubs, general plants not specified above' },
+  const json = await res.json();
+  return json.data[0].embedding;
+}
 
-  // -------------------- Art --------------------
-  { name: 'Art', parent_id: null, description: 'Creative works, visual art, human-made aesthetic creations' },
-  { name: 'Statues', parent_id: 22, description: 'Sculptures, stone or metal statues, monuments, figurines' },
-  { name: 'Paintings', parent_id: 22, description: 'Paintings, murals, canvases, wall art, traditional or modern' },
-  { name: 'Street Art', parent_id: 22, description: 'Graffiti, murals, urban art, public installations' },
-  { name: 'Other Artwork', parent_id: 22, description: 'Miscellaneous artwork not fitting above, mixed media' },
-
-  // -------------------- Culture --------------------
-  { name: 'Culture', parent_id: null, description: 'Human cultural expressions, traditions, heritage, rituals' },
-  { name: 'Religion', parent_id: 27, description: 'Churches, temples, shrines, religious symbols, sacred sites' },
-  { name: 'Folklore/Traditions', parent_id: 27, description: 'Myths, legends, traditional costumes, rituals, local folklore' },
-  { name: 'Festivals', parent_id: 27, description: 'Festivals, parades, celebrations, public cultural events' },
-
-  // -------------------- Miscellaneous --------------------
-  { name: 'Miscellaneous', parent_id: null, description: 'Images that don’t fit into any other category' }
-];
-
-
+// --------------------
+// Main
+// --------------------
 async function run() {
-  for (const cat of categories) {
-    const { error } = await supabase.from('category_vectors').insert(cat);
-    if (error) {
-      console.error(`Failed to insert ${cat.name}`, error);
-    } else {
-      console.log(`Inserted category: ${cat.name}`);
+  // fetch categories without vectors
+  const { data: categories, error } = await supabase
+    .from('image_categories')
+    .select('id, name, description')
+    .is('vector', null);
+
+  if (error) {
+    console.error('Error fetching categories:', error);
+    return;
+  }
+
+  console.log(`Found ${categories.length} categories to embed`);
+
+  for (const category of categories) {
+    try {
+      console.log(`Generating vector for: ${category.name}`);
+
+      const vector = await generateEmbedding(category.description);
+
+      // update table
+      const { error: updateError } = await supabase
+        .from('image_categories')
+        .update({ vector })
+        .eq('id', category.id);
+
+      if (updateError) {
+        console.error(`Failed to update category ${category.name}:`, updateError);
+      } else {
+        console.log(`✅ Vector saved for ${category.name}`);
+      }
+
+      await sleep(RATE_LIMIT_MS); // avoid rate limits
+
+    } catch (err) {
+      console.error(`❌ Error generating vector for ${category.name}:`, err.message);
     }
   }
+
+  console.log('All done!');
 }
 
 run();

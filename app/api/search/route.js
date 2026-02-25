@@ -30,8 +30,6 @@ export async function POST(req) {
 
     const queryVector = embeddingResponse.data[0].embedding;
 
-    console.log('🔹 Query vector length:', queryVector.length);
-    console.log('🔹 First 10 values of vector:', queryVector.slice(0, 10));
 
     // 2️⃣ Call Supabase RPC function to get nearest images
     const { data, error } = await supabase.rpc('match_images', {
