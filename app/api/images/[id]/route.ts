@@ -47,11 +47,24 @@ export async function GET(
 
     if (tagsError) console.warn("Failed to fetch tags", tagsError);
 
-    // 3️⃣ Build optimized image object
+    // 3 Fetch related categories (max 2, with similarity check)
+    // 3️⃣ Fetch related categories using RPC
+    const { data: categories, error: catError } = await supabase.rpc('get_closest_categories', {
+      image_vector: image.vector,
+      limit_count: 2, // max 2 categories
+    });
+
+    if (catError) console.warn("Failed to fetch categories", catError);
+
+    // Optional: filter by similarity threshold (e.g., distance <= 1)
+    const SIMILARITY_THRESHOLD = 1;
+    const filteredCategories = categories?.filter(cat => cat.distance <= SIMILARITY_THRESHOLD) ?? [];
+    // 4 Build optimized image object
     const optimizedImage = {
       ...image,
       url: getOptimizedWikimediaUrl(image.url),
       tags: tags || [],
+      taxonomy: filteredCategories || [],
     };
 
     return NextResponse.json(optimizedImage);
