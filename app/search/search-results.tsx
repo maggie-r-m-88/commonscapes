@@ -108,7 +108,7 @@ export default function SearchResults() {
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i + 1}
-              onClick={() => router.push(`/search?q=${encodeURIComponent(query)}&type=${type}&page=${i + 1}`)}
+              onClick={() => router.push(`/search?q=${encodeURIComponent(query || "")}&type=${type}&page=${i + 1}`)}
               className={`px-3 py-1 rounded ${
                 i + 1 === page ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300"
               }`}
