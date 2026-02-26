@@ -219,7 +219,7 @@ export default function ImageDetailPage() {
 
             {/* Related Images */}
             <div className="my-8">
-              <h2 className="text-lg font-bold text-gray-900 break-words">Related Images</h2>
+              <h2 className="text-lg font-bold text-gray-900 break-words mb-6">Related Images</h2>
               {relatedLoading ? (
                 <div className="flex items-center justify-center py-10 my-10">
                   <Loader />

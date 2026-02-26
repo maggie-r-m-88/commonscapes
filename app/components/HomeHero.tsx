@@ -1,10 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import Meta from "./Meta";
-import { Link } from 'next-view-transitions'
-import TagsMeta from "./TagsMeta";
 import ImageGrid from "./HomeFeaturedGrid";
 import { useFeaturedImages } from "@/app/hooks/useFeaturedImages";
 import { useQueryClient } from "@tanstack/react-query";

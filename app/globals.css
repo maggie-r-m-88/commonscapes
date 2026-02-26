@@ -79,3 +79,8 @@ h6 {
   }
 }
 
+.searchBtnIcon{
+  fill: hsl(226.15deg 12.04% 57.65%);
+  width: 1em;
+  height: 1em;
+}
