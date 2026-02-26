@@ -6,24 +6,36 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const format = searchParams.get("format");
 
-    // Fetch all images from Supabase
+    // Get total count first
+    const { count, error: countError } = await supabase
+      .from('images')
+      .select('*', { count: 'exact', head: true });
+
+    if (countError || !count || count === 0) {
+      console.error("Supabase error:", countError);
+      return new Response(null, { status: 404 });
+    }
+
+    // Pick a random offset
+    const randomOffset = Math.floor(Math.random() * count);
+
+    // Fetch only ONE random image
+    const selectFields = format === "json"
+      ? '*'  // Full data if JSON requested
+      : 'url';  // Only URL for redirect
+
     const { data: images, error } = await supabase
       .from('images')
-      .select('*');
+      .select(selectFields)
+      .range(randomOffset, randomOffset)
+      .limit(1);
 
-    if (error) {
+    if (error || !images || images.length === 0) {
       console.error("Supabase error:", error);
       return new Response(null, { status: 500 });
     }
 
-    // Check if we have any images
-    if (!images || images.length === 0) {
-      return new Response(null, { status: 404 });
-    }
-
-    // Pick a random image
-    const randomIndex = Math.floor(Math.random() * images.length);
-    const randomImage = images[randomIndex];
+    const randomImage = images[0];
 
     // If format=json, return the full image data
     if (format === "json") {

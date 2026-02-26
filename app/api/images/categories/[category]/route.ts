@@ -29,7 +29,7 @@ export async function GET(
             "get_closest_images",
             {
                 category_vector: category.vector,
-                similarity_threshold: 0.25, // tweak this
+                similarity_threshold: 0.19, // tweak this
                 limit_count: pageSize,
                 offset_count: (page - 1) * pageSize,
             }

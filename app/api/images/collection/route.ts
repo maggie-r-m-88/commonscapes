@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     // 1️⃣ Fetch images from the collection, featured first
     const { data: images, error } = await supabase
       .from("images")
-      .select("id, url, title, description, owner, featured")
+      .select("id, url")
       .order("featured", { ascending: false })
       .order("added_at", { ascending: false })
       .range(offset, offset + pageSize - 1);

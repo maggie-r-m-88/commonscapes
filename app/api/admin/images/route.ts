@@ -15,9 +15,10 @@ export async function GET(request: NextRequest) {
     const from = (page - 1) * limit;
     const to = from + limit - 1;
 
+    // Only select fields needed for the admin list view to reduce egress
     let query = supabase
       .from("images")
-      .select("*", { count: "exact" })
+      .select("id, url, title, added_at, source, attribution, width, height", { count: "exact" })
       .order("added_at", { ascending: false })
       .range(from, to);
 

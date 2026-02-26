@@ -58,7 +58,7 @@ export default function CollectionPage() {
       {/* Category cards — page 1 only */}
       {page === 1 && (
         <div className="mb-10">
-          <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-4">
+          <h2 className="text-xl font-medium  mb-4">
             Browse by category
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -88,9 +88,9 @@ export default function CollectionPage() {
           <h1 className="text-xl font-medium">
             {page === 1 ? "Browse all" : "Collection"}
           </h1>
-          {total > 0 && (
+{/*           {total > 0 && (
             <span className="text-sm text-gray-400">{total.toLocaleString()} images</span>
-          )}
+          )} */}
         </div>
 
         {/* Categories button — drawer hookup comes next */}

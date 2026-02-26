@@ -60,7 +60,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white py-16 text-center border-t border-gray-200 w-full">
+{/*       <section className="bg-white py-16 text-center border-t border-gray-200 w-full">
         <div className="max-w-7xl mx-auto px-8">
           <h2 className="text-4xl font-normal mb-4">
             Get started with the wallpaper script
@@ -95,7 +95,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
 
     </div>
   );
