@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-
+import Loader from "@/app/components/Loader";
 interface ImageData {
   id: string | number;
   url: string;
@@ -40,7 +40,7 @@ export default function TagPage() {
   if (isLoading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Loading images for "{tag}"...
+        <Loader />
       </div>
     );
 

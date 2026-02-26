@@ -5,11 +5,11 @@ import BackButton from "@/app/components/BackButton";
 import { useParams } from "next/navigation";
 import { Link } from "next-view-transitions";
 import { removeFilename } from "@/lib/remove-filename";
-
 import { useImage } from "@/app/hooks/useImage";
 import { useTags } from "@/app/hooks/useTags";
 import { useTaxonomy } from "@/app/hooks/useTaxonomy";
 import { useState, useEffect } from "react";
+import Loader from "@/app/components/Loader";
 
 interface RelatedImage {
   id: number;
@@ -47,7 +47,7 @@ export default function ImageDetailPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen w-full bg-gray-100 p-6 flex items-center justify-center">
-        <p className="text-gray-600">Loading image...</p>
+        <Loader />
       </div>
     );
   }
@@ -168,8 +168,8 @@ export default function ImageDetailPage() {
                     <div className="text-right text-gray-700">
                       {image.taken_at
                         ? new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(
-                            new Date(image.taken_at)
-                          )
+                          new Date(image.taken_at)
+                        )
                         : "Unknown"}
                     </div>
                     <div className="text-left font-medium text-gray-500">Format</div>
@@ -178,18 +178,19 @@ export default function ImageDetailPage() {
                 </div>
               )}
 
-                            {/* Taxonomy */}
+              {/* Taxonomy */}
               {taxonomy.length > 0 && (
                 <div className="p-6 border-b border-gray-200">
                   <div className="text-xs uppercase text-gray-500 mb-4">Categories</div>
                   <div className="">
                     {taxonomy.map((cat) => (
-                      <div
+                      <Link
                         key={cat.id}
-                        className="px-2 py-1 bg-gray-50 rounded-sm text-sm mb-1 text-gray-700"
+                        href={`/images/categories/${encodeURIComponent(cat.name)}`}
+                        className="block px-2 py-1 bg-gray-50 rounded-sm text-sm mb-1 text-gray-700 hover:bg-gray-200 transition-colors"
                       >
                         {cat.name}
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -220,7 +221,11 @@ export default function ImageDetailPage() {
             <div className="my-8">
               <h2 className="text-lg font-bold text-gray-900 break-words">Related Images</h2>
               {relatedLoading ? (
-                <p className="text-gray-500">Loading related images...</p>
+                <div className="flex items-center justify-center py-10 my-10">
+                  <Loader />
+                </div>
+              ) : error ? (
+                <p className="text-gray-500">Failed to load related images.</p>
               ) : relatedImages.length === 0 ? (
                 <p className="text-gray-500">No related images found.</p>
               ) : (

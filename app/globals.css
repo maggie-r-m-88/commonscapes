@@ -33,14 +33,19 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-noto-naskh-arabic);
 }
 
-.bg-pattern{
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgb(243, 244, 246) 2px, rgb(243, 244, 246) 4px);
+.bg-pattern {
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgb(243, 244, 246) 2px, rgb(243, 244, 246) 4px);
 }
- 
+
 
 .grid-image {
   width: fit-content;
@@ -57,3 +62,20 @@ h1, h2, h3, h4, h5, h6 {
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
 }
+
+.logoLoader {
+  animation: bounce 1s ease-in-out 0s infinite alternate forwards;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+

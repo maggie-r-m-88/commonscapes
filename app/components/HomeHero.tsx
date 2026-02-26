@@ -8,6 +8,7 @@ import TagsMeta from "./TagsMeta";
 import ImageGrid from "./HomeFeaturedGrid";
 import { useFeaturedImages } from "@/app/hooks/useFeaturedImages";
 import { useQueryClient } from "@tanstack/react-query";
+import Loader from "./Loader";
 
 interface ImageData {
   id: string | number;
@@ -52,7 +53,7 @@ export default function HomeExplore() {
     return (
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-8 text-center">
-          <p className="text-gray-600">Loading...</p>
+          <Loader />
         </div>
       </section>
     );
