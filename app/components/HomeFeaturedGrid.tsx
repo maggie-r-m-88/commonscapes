@@ -62,7 +62,7 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
       {featuredImage && (
         <Link
           key={featuredImage.id}
-         href={`/images/${featuredImage.id}`}
+          href={`/images/${featuredImage.id}`}
           className="md:col-span-2 md:row-span-2"
         >
           <div className="grid-item overflow-hidden rounded-sm shadow-md bg-white relative group cursor-pointer h-full transition-all hover:-translate-y-1 hover:shadow-xl">
@@ -75,10 +75,10 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
                 className="grid-image"
                 priority
                 unoptimized
-                  style={{
-                    viewTransitionName: `image-${featuredImage.id}`,
-                    willChange: "transform",
-                  }}
+                style={{
+                  viewTransitionName: `image-${featuredImage.id}`,
+                  willChange: "transform",
+                }}
               />
               <div className="absolute inset-0 bg-black/60 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="text-white">
@@ -103,10 +103,10 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
                 sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover"
                 unoptimized
-                  style={{
-                    viewTransitionName: `image-${image.id}`,
-                    willChange: "transform",
-                  }}
+                style={{
+                  viewTransitionName: `image-${image.id}`,
+                  willChange: "transform",
+                }}
               />
               <div className="absolute inset-0 bg-black/60 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="text-white">
@@ -118,18 +118,28 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
           </div>
         </Link>
       ))}
-
       {/* CTA Card */}
       <Link
-        href="/browse"
-        className="grid-item overflow-hidden shadow-md bg-gradient-to-br from-gray-900 to-gray-700 flex items-center justify-center cursor-pointer hover:from-gray-800 hover:to-gray-600 transition-all group"
+        href="/collection"
+        className="grid-item overflow-hidden shadow-md rounded-sm bg-gradient-to-br from-[#444B4B] to-[#657B75] cursor-pointer transition-all group relative"
       >
-        <div className="text-center text-white p-6">
-          <p className="text-3xl font-light mb-2">1,000+</p>
-          <p className="text-sm mb-3">curated images</p>
-          <p className="text-xs text-gray-300 group-hover:text-white transition-colors">
-            Browse collection →
-          </p>
+        {/* Faded logo watermark */}
+        <svg
+          width="260" height="260"
+          viewBox="0 0 400 400"
+          className="absolute -bottom-10 -right-10 opacity-[0.09] text-white"
+          fill="currentColor"
+        >
+          <path d="M96.920 143.661 C 74.551 188.299,56.250 226.268,56.250 228.036 C 56.250 229.804,105.658 231.250,166.045 231.250 L 275.839 231.250 237.001 157.813 C 167.755 26.879,156.032 25.695,96.920 143.661 M231.801 89.961 C 216.001 108.999,292.531 231.105,320.313 231.184 C 349.537 231.266,349.944 234.554,311.875 163.020 C 268.009 80.596,251.827 65.831,231.801 89.961 M51.380 285.312 C 55.707 337.482,55.757 337.500,200.000 337.500 C 344.243 337.500,344.293 337.482,348.620 285.312 L 351.548 250.000 200.000 250.000 L 48.452 250.000 51.380 285.312" />
+        </svg>
+
+        {/* Content */}
+        <div className="relative z-10 p-6 w-full h-full flex flex-col justify-end">
+          <h4 className="text-white text-3xl leading-snug tracking-tight">
+            Explore the<br />
+            collection{" "}
+            <span className="inline-block text-white/50 group-hover:translate-x-1 transition-transform">→</span>
+          </h4>
         </div>
       </Link>
     </div>
