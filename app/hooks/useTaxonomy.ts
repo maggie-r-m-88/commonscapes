@@ -13,13 +13,11 @@ export function useTaxonomy(id: string | number) {
   return useQuery<TaxonomyData[]>({
     queryKey: ["taxonomy", String(id)],
     queryFn: async () => {
-      console.log("[useTaxonomy] Fetching taxonomy for image", id);
       const res = await fetch(`/api/images/${id}/taxonomy`);
       if (!res.ok) {
         throw new Error(`Failed to fetch taxonomy for image ${id}`);
       }
       const data = await res.json();
-      console.log("[useTaxonomy] Received taxonomy:", data);
       return data;
     },
     enabled: !!id,          // only fetch when id is defined
