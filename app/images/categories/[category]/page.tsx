@@ -73,7 +73,7 @@ export default function CategoryPage() {
         <div className="mb-10">
           <h2 className="text-xl font-medium mb-4">Subcategories</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {subcategories.categories.map((sub) => (
+            {subcategories.categories.map((sub: Subcategory) => (
               <button
                 key={sub.id}
                 onClick={() => router.push(`/images/categories/${sub.slug}`)}
