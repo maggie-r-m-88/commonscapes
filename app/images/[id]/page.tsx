@@ -186,7 +186,7 @@ export default function ImageDetailPage() {
                     {taxonomy.map((cat) => (
                       <Link
                         key={cat.id}
-                        href={`/images/categories/${encodeURIComponent(cat.name)}`}
+                        href={`/images/categories/${cat.slug}`}
                         className="block px-2 py-1 bg-gray-50 rounded-sm text-sm mb-1 text-gray-700 hover:bg-gray-200 transition-colors"
                       >
                         {cat.name}

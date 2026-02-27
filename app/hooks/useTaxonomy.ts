@@ -6,6 +6,7 @@ export interface TaxonomyData {
   id: number;
   name: string;
   description: string;
+  slug: string;
 }
 
 export function useTaxonomy(id: string | number) {
