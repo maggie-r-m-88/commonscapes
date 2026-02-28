@@ -50,17 +50,24 @@ function PillPagination({
       <div className="flex items-stretch rounded-lg overflow-hidden bg-white shadow">
 
         {/* Previous */}
-        <button
-          onClick={() => goToPage(page - 1)}
-          disabled={page === 1}
-          className="flex items-center gap-2 px-4 py-2.5 bg-white font-semibold border-r border-[#e0ddd6] shadow hover:shadow-md transition-shadow disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#555] cursor-pointer"
-        
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Previous
-        </button>
+<button
+  onClick={() => goToPage(page - 1)}
+  disabled={page === 1}
+  className="
+    flex items-center gap-2 px-4 py-2.5 
+    bg-white font-semibold text-[#555] border-r border-[#e0ddd6] 
+    transition-colors duration-150 
+    hover:bg-[#1c1c1e] hover:text-white 
+    disabled:opacity-20 disabled:cursor-not-allowed 
+    disabled:hover:bg-white disabled:hover:text-[#555] 
+    cursor-pointer
+  "
+>
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+  Previous
+</button>
 
         {/* Page input */}
         <div className="flex items-center gap-2 px-5 text-lg text-gray-400">
