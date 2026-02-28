@@ -52,9 +52,9 @@ function CollectionContent() {
     <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
       {/* Category cards on page 1 */}
       {page === 1 && categories.length > 0 && (
-        <div className="mb-10 w-[66%]">
+        <div className="mb-10">
           <h2 className="text-xl font-medium mb-4">Browse by category</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {categories.map((cat: any) => (
               <button
                 key={cat.id}

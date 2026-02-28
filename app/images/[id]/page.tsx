@@ -101,7 +101,34 @@ export default function ImageDetailPage() {
                 <BackButton />
               </div>
 
-              {/* Tags */}
+                            {/* Taxonomy */}
+              {taxonomy.length > 0 && (
+                <div className="p-6 border-b border-gray-200">
+                  <div className="text-xs uppercase text-gray-500 mb-4">Categories</div>
+                  <div className="">
+                    {taxonomy.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        href={`/images/categories/${cat.slug}`}
+                        className="block px-2 py-1 bg-gray-50 rounded-sm text-sm mb-1 text-gray-700 hover:bg-gray-200 transition-colors"
+                      >
+                        {cat.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+
+              {/* Description */}
+              {image.description && (
+                <div className="p-6 border-b border-gray-200">
+                  <div className="text-xs uppercase text-gray-500 mb-2">Description</div>
+                  <p className="text-gray-700 text-sm leading-relaxed">{image.description}</p>
+                </div>
+              )}
+
+                            {/* Tags */}
               {tags.length > 0 && (
                 <div className="p-6 border-b border-gray-200">
                   <div className="text-xs uppercase text-gray-500 mb-4">Tags</div>
@@ -119,13 +146,6 @@ export default function ImageDetailPage() {
                 </div>
               )}
 
-              {/* Description */}
-              {image.description && (
-                <div className="p-6 border-b border-gray-200">
-                  <div className="text-xs uppercase text-gray-500 mb-2">Description</div>
-                  <p className="text-gray-700 text-sm leading-relaxed">{image.description}</p>
-                </div>
-              )}
 
               {/* Attribution / License / Source */}
               <div className="p-6 border-b border-gray-200 space-y-4">
@@ -179,23 +199,7 @@ export default function ImageDetailPage() {
                 </div>
               )}
 
-              {/* Taxonomy */}
-              {taxonomy.length > 0 && (
-                <div className="p-6 border-b border-gray-200">
-                  <div className="text-xs uppercase text-gray-500 mb-4">Categories</div>
-                  <div className="">
-                    {taxonomy.map((cat) => (
-                      <Link
-                        key={cat.id}
-                        href={`/images/categories/${cat.slug}`}
-                        className="block px-2 py-1 bg-gray-50 rounded-sm text-sm mb-1 text-gray-700 hover:bg-gray-200 transition-colors"
-                      >
-                        {cat.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
+
 
             </div>
           </aside>

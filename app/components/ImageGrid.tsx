@@ -73,6 +73,66 @@ export default function ImageGrid({
 
   return (
     <div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center my-6 gap-3">
+          {/* Previous */}
+          <button
+            onClick={() => goToPage(page - 1)}
+            disabled={page === 1}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-gray-200 text-sm bg-white hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M10 3L5 8l5 5" />
+            </svg>
+            Previous
+          </button>
+
+          {/* Page Jump */}
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <span>Page</span>
+            <input
+              type="number"
+              min={1}
+              max={totalPages}
+              value={jumpValue}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                if (!isNaN(val)) setJumpValue(val);
+              }}
+              className="w-12 h-8 text-center border border-gray-200 rounded font-mono text-sm text-gray-800 focus:outline-none focus:border-gray-400"
+            />
+            <span>of {totalPages}</span>
+          </div>
+
+          {/* Next */}
+          <button
+            onClick={() => goToPage(page + 1)}
+            disabled={page === totalPages}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-gray-200 text-sm bg-white hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            Next
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M6 3l5 5-5 5" />
+            </svg>
+          </button>
+        </div>
+      )}
       
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 auto-rows-[200px] md:auto-rows-[250px]">

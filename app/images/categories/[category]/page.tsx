@@ -71,12 +71,12 @@ export default function CategoryPage() {
       {/* Render subcategories on first page */}
       {page === 1 && subcategories?.categories?.length > 0 && (
         <div className="mb-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {subcategories.categories.map((sub: Subcategory) => (
               <button
                 key={sub.id}
                 onClick={() => router.push(`/images/categories/${sub.slug}`)}
-                className="relative aspect-[3/2] rounded-lg overflow-hidden bg-gray-200 group text-left"
+                className="relative aspect-[3/2] rounded shadow overflow-hidden bg-gray-200 group text-left"
               >
                 {/* Thumbnail */}
                 {sub.thumbnail_url ? (
