@@ -64,7 +64,7 @@ export default function ImageDetailPage() {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-4xl xl:max-w-5xl mx-auto px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
           {/* Sidebar */}
@@ -72,13 +72,13 @@ export default function ImageDetailPage() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
 
               {/* Info & Back */}
-              <div className="p-6 border-b border-gray-200 text-center space-y-2">
+              <div className="p-6 border-b border-gray-200 text-center space-y-2 shadow-sm hover:shadow-md transition-shadow">
                 {image.info_url && (
                   <a
                     href={image.info_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#657B75] hover:bg-[#444B4B] text-white rounded-lg transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#657B75] hover:bg-[#444B4B] text-white rounded-lg transition-colors shadow-sm"
                   >
                                         <svg
                       className="w-4 h-4"
