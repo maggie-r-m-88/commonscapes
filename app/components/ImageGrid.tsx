@@ -23,6 +23,78 @@ interface ImageGridProps {
   showTitle?: boolean;
 }
 
+function PillPagination({
+  page,
+  totalPages,
+  goToPage,
+}: {
+  page: number;
+  totalPages: number;
+  goToPage: (p: number) => void;
+}) {
+  const [jumpValue, setJumpValue] = useState(page);
+
+  useEffect(() => {
+    setJumpValue(page);
+  }, [page]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (jumpValue !== page) goToPage(jumpValue);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [jumpValue]);
+
+  return (
+    <div className="flex justify-center">
+      <div className="flex items-stretch rounded-lg overflow-hidden bg-white shadow">
+
+        {/* Previous */}
+        <button
+          onClick={() => goToPage(page - 1)}
+          disabled={page === 1}
+          className="flex items-center gap-2 px-4 py-2.5 bg-white font-semibold border-r border-[#e0ddd6] shadow hover:shadow-md transition-shadow disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#555]"
+        
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Previous
+        </button>
+
+        {/* Page input */}
+        <div className="flex items-center gap-2 px-5 text-lg text-gray-400">
+          <input
+            type="number"
+            min={1}
+            max={totalPages}
+            value={jumpValue}
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              if (!isNaN(val)) setJumpValue(val);
+            }}
+            className="w-[52px] text-center bg-white font-mono text-lg font-semibold text-[#1c1c1e] py-1.5 px-1 outline-none focus:border-[#1c1c1e] transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
+          <span>/ {totalPages}</span>
+        </div>
+
+        {/* Next */}
+        <button
+          onClick={() => goToPage(page + 1)}
+          disabled={page === totalPages}
+          className="flex items-center gap-2 px-4 py-2.5 bg-white font-semibold text-[#555] border-l border-[#e0ddd6] transition-colors duration-150 hover:bg-[#1c1c1e] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#555]"
+        >
+          Next
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+      </div>
+    </div>
+  );
+}
+
 export default function ImageGrid({
   images,
   total = 0,
@@ -36,32 +108,12 @@ export default function ImageGrid({
 
   const totalPages = Math.ceil(total / pageSize);
 
-  const [jumpValue, setJumpValue] = useState(page);
-
-  useEffect(() => {
-    setJumpValue(page);
-  }, [page]);
-
-  // ✅ Safe navigation that preserves ALL existing params
   const goToPage = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
-
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(newPage));
-
     router.push(`${pathname}?${params.toString()}`);
   };
-
-  // Debounced jump input
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (jumpValue !== page) {
-        goToPage(jumpValue);
-      }
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [jumpValue]);
 
   if (!images || images.length === 0) {
     return (
@@ -73,67 +125,13 @@ export default function ImageGrid({
 
   return (
     <div>
-
-      {/* Pagination */}
+      {/* Top Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center my-6 gap-3">
-          {/* Previous */}
-          <button
-            onClick={() => goToPage(page - 1)}
-            disabled={page === 1}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-gray-200 text-sm bg-white hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M10 3L5 8l5 5" />
-            </svg>
-            Previous
-          </button>
-
-          {/* Page Jump */}
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span>Page</span>
-            <input
-              type="number"
-              min={1}
-              max={totalPages}
-              value={jumpValue}
-              onChange={(e) => {
-                const val = parseInt(e.target.value);
-                if (!isNaN(val)) setJumpValue(val);
-              }}
-              className="w-12 h-8 text-center border border-gray-200 rounded font-mono text-sm text-gray-800 focus:outline-none focus:border-gray-400"
-            />
-            <span>of {totalPages}</span>
-          </div>
-
-          {/* Next */}
-          <button
-            onClick={() => goToPage(page + 1)}
-            disabled={page === totalPages}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-gray-200 text-sm bg-white hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            Next
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M6 3l5 5-5 5" />
-            </svg>
-          </button>
+        <div className="my-6">
+          <PillPagination page={page} totalPages={totalPages} goToPage={goToPage} />
         </div>
       )}
-      
+
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 auto-rows-[200px] md:auto-rows-[250px]">
         {images.map((img, index) => {
@@ -146,9 +144,7 @@ export default function ImageGrid({
               href={`/images/${img.id}`}
               className={
                 isLarge
-                  ? `md:col-span-2 md:row-span-2 ${
-                      isRightSide ? "md:col-start-2" : ""
-                    }`
+                  ? `md:col-span-2 md:row-span-2 ${isRightSide ? "md:col-start-2" : ""}`
                   : ""
               }
             >
@@ -164,17 +160,12 @@ export default function ImageGrid({
                     willChange: "transform",
                   }}
                 />
-
                 <div className="absolute inset-0 bg-black/60 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="text-white">
                     {showTitle && (
                       <>
-                        <p className="text-sm font-medium line-clamp-1">
-                          {img.description}
-                        </p>
-                        <p className="text-xs text-gray-200 line-clamp-1">
-                          {img.owner}
-                        </p>
+                        <p className="text-sm font-medium line-clamp-1">{img.description}</p>
+                        <p className="text-xs text-gray-200 line-clamp-1">{img.owner}</p>
                       </>
                     )}
                   </div>
@@ -185,63 +176,10 @@ export default function ImageGrid({
         })}
       </div>
 
-      {/* Pagination */}
+      {/* Bottom Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center mt-6 gap-3">
-          {/* Previous */}
-          <button
-            onClick={() => goToPage(page - 1)}
-            disabled={page === 1}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-gray-200 text-sm bg-white hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M10 3L5 8l5 5" />
-            </svg>
-            Previous
-          </button>
-
-          {/* Page Jump */}
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span>Page</span>
-            <input
-              type="number"
-              min={1}
-              max={totalPages}
-              value={jumpValue}
-              onChange={(e) => {
-                const val = parseInt(e.target.value);
-                if (!isNaN(val)) setJumpValue(val);
-              }}
-              className="w-12 h-8 text-center border border-gray-200 rounded font-mono text-sm text-gray-800 focus:outline-none focus:border-gray-400"
-            />
-            <span>of {totalPages}</span>
-          </div>
-
-          {/* Next */}
-          <button
-            onClick={() => goToPage(page + 1)}
-            disabled={page === totalPages}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded border border-gray-200 text-sm bg-white hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            Next
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path d="M6 3l5 5-5 5" />
-            </svg>
-          </button>
+        <div className="mt-6">
+          <PillPagination page={page} totalPages={totalPages} goToPage={goToPage} />
         </div>
       )}
     </div>

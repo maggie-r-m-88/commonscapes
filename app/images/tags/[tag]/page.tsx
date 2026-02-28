@@ -34,16 +34,19 @@ export default function TagPage() {
   const total = data?.total || 0;
 
   return (
-    <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
-      <h1 className="text-xl font-semibold mb-6">Images tagged "{decodedTag}"</h1>
+    <div className="w-full bg-pattern">
+      <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
+        <h1 className="text-xl font-semibold mb-6">Images tagged "{decodedTag}"</h1>
 
-      <ImageGrid
-        images={images}
-        total={total}
-        page={page}
-        pageSize={pageSize}
-    
-      />
+        <ImageGrid
+          images={images}
+          total={total}
+          page={page}
+          pageSize={pageSize}
+
+        />
+      </div>
     </div>
+
   );
 }

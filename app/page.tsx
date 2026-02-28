@@ -7,9 +7,9 @@ export default function Home() {
     <div className="flex min-h-screen flex-col items-center justify-center font-sans bg-pattern">
       <section className="py-12 text-center w-full">
         <div className="max-w-7xl xl:max-w-5xl  mx-auto px-6">
-          <h1 className="text-5xl leading-tight mb-6 text-gray-900">
+          <p className="text-5xl leading-tight mb-6 text-gray-900">
             Handpicked visuals from<br />open cultural archives
-          </h1>
+          </p>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
             A curated image library built from Wikimedia Commons and other freely
             licensed sources. Every image is hand-selected for quality, aesthetics,

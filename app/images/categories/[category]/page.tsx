@@ -65,49 +65,52 @@ export default function CategoryPage() {
   const total = data?.total || 0;
 
   return (
-    <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
-      <h1 className="text-xl font-semibold mb-6 capitalize">{decodedCategory}</h1>
+    <div class="bg-pattern w-full">
+      <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
+        <h1 className="text-xl font-semibold mb-6 capitalize">{decodedCategory}</h1>
 
-      {/* Render subcategories on first page */}
-      {page === 1 && subcategories?.categories?.length > 0 && (
-        <div className="mb-10">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {subcategories.categories.map((sub: Subcategory) => (
-              <button
-                key={sub.id}
-                onClick={() => router.push(`/images/categories/${sub.slug}`)}
-                className="relative aspect-[3/2] rounded shadow overflow-hidden bg-gray-200 group text-left"
-              >
-                {/* Thumbnail */}
-                {sub.thumbnail_url ? (
-                  <img
-                    src={sub.thumbnail_url}
-                    alt={sub.name}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gray-200" />
-                )}
+        {/* Render subcategories on first page */}
+        {page === 1 && subcategories?.categories?.length > 0 && (
+          <div className="mb-10 ">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {subcategories.categories.map((sub: Subcategory) => (
+                <button
+                  key={sub.id}
+                  onClick={() => router.push(`/images/categories/${sub.slug}`)}
+                  className="relative aspect-[3/2] rounded shadow overflow-hidden bg-gray-200 group text-left"
+                >
+                  {/* Thumbnail */}
+                  {sub.thumbnail_url ? (
+                    <img
+                      src={sub.thumbnail_url}
+                      alt={sub.name}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gray-200" />
+                  )}
 
-                {/* Overlay with name */}
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition-colors duration-200 flex items-end p-3">
-                  <p className="text-white text-sm font-medium leading-tight">
-                    {sub.name}
-                  </p>
-                </div>
-              </button>
-            ))}
+                  {/* Overlay with name */}
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition-colors duration-200 flex items-end p-3">
+                    <p className="text-white text-sm font-medium leading-tight">
+                      {sub.name}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {images.length > 0 ? (
-        <ImageGrid images={images} total={total} page={page} pageSize={pageSize} />
-      ) : (
-        <div className="min-h-[200px] flex items-center justify-center">
-          No images found for category "{decodedCategory}"
-        </div>
-      )}
+        {images.length > 0 ? (
+          <ImageGrid images={images} total={total} page={page} pageSize={pageSize} />
+        ) : (
+          <div className="min-h-[200px] flex items-center justify-center">
+            No images found for category "{decodedCategory}"
+          </div>
+        )}
+      </div>
     </div>
+
   );
 }
