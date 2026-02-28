@@ -34,8 +34,8 @@ export default function TagPage() {
   const total = data?.total || 0;
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
-      <h1 className="text-2xl font-semibold mb-6">Images tagged "{decodedTag}"</h1>
+    <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
+      <h1 className="text-xl font-semibold mb-6">Images tagged "{decodedTag}"</h1>
 
       <ImageGrid
         images={images}

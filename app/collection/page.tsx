@@ -49,17 +49,17 @@ function CollectionContent() {
   const categories = categoryData?.categories || [];
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
+    <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
       {/* Category cards on page 1 */}
       {page === 1 && categories.length > 0 && (
-        <div className="mb-10">
+        <div className="mb-10 w-[66%]">
           <h2 className="text-xl font-medium mb-4">Browse by category</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {categories.map((cat: any) => (
               <button
                 key={cat.id}
                 onClick={() => router.push(`/images/categories/${cat.slug}`)}
-                className="relative aspect-[3/2] rounded-lg overflow-hidden bg-gray-200 group text-left"
+                className="relative aspect-[3/2] rounded shadow overflow-hidden bg-gray-200 group text-left"
               >
                 <img
                   src={cat.thumbnail_url}

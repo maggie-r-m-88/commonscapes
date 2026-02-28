@@ -48,9 +48,9 @@ export default function SearchResults() {
     );
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
-      <h1 className="text-2xl font-semibold mb-6">
-        Results for "{decodedQuery}"
+    <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
+      <h1 className="text-xl font-semibold mb-6">
+        Search results for "{decodedQuery}"
       </h1>
 
       <ImageGrid

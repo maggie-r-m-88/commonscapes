@@ -54,6 +54,10 @@ export async function POST(req) {
     }
 
     const total = data[0]?.total_count || 0;
+    const distances = data.map(img => img.distance).sort((a, b) => a - b);
+
+    console.log(`🔍 Search results: ${data.length} images, total: ${total}, page: ${page}`);
+    console.log(`📊 Distance range: min=${distances[0]?.toFixed(3)}, max=${distances[distances.length-1]?.toFixed(3)}`);
 
     // 🔄 Transform Wikimedia URLs
     const transformedImages = data.map((img) => {

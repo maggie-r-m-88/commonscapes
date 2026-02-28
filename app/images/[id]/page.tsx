@@ -63,7 +63,7 @@ export default function ImageDetailPage() {
   const imageTitle = image.title ? removeFilename(image.title) : "Untitled";
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-6">
+    <div className="min-h-screen w-full bg-pattern p-6">
       <div className="max-w-4xl xl:max-w-5xl mx-auto px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
@@ -72,7 +72,7 @@ export default function ImageDetailPage() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
 
               {/* Info & Back */}
-              <div className="p-6 border-b border-gray-200 text-center space-y-2 shadow-sm hover:shadow-md transition-shadow">
+              <div className="p-6 border-b border-gray-200 text-center space-y-2 transition-shadow">
                 {image.info_url && (
                   <a
                     href={image.info_url}
@@ -220,7 +220,7 @@ export default function ImageDetailPage() {
 
             {/* Related Images */}
             <div className="my-8">
-              <h2 className="text-lg font-bold text-gray-900 break-words mb-6">Related Images</h2>
+              <h2 className="text-base font-bold text-gray-900 break-words mb-6">Related Images</h2>
               {relatedLoading ? (
                 <div className="flex items-center justify-center py-10 my-10">
                   <Loader />
@@ -233,7 +233,7 @@ export default function ImageDetailPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {relatedImages.map((rel) => (
                     <Link key={rel.id} href={`/images/${rel.id}`}>
-                      <div className="relative w-full h-48 rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow bg-gray-100">
+                      <div className="relative w-full h-48 rounded overflow-hidden shadow hover:shadow-lg transition-shadow bg-gray-100">
                         <Image
                           src={rel.url}
                           alt={rel.title || "Related image"}

@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center font-sans bg-pattern">
       <section className="py-12 text-center w-full">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl xl:max-w-5xl  mx-auto px-6">
           <h1 className="text-5xl leading-tight mb-6 text-gray-900">
             Handpicked visuals from<br />open cultural archives
           </h1>
@@ -19,12 +19,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-8 w-full">
+      <section className="max-w-7xl xl:max-w-5xl  mx-auto px-8 w-full">
         <HomeHeroImage />
       </section>
 
       <section className="py-16 w-full">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-7xl xl:max-w-5xl  mx-auto px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-12">
             <div className="text-left">
               <h3 className="text-xl font-medium mb-3 text-gray-900">
@@ -61,7 +61,7 @@ export default function Home() {
       </section>
 
 {/*       <section className="bg-white py-16 text-center border-t border-gray-200 w-full">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-7xl xl:max-w-5xl  mx-auto px-8">
           <h2 className="text-4xl font-normal mb-4">
             Get started with the wallpaper script
           </h2>

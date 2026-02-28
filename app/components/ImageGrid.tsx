@@ -73,6 +73,7 @@ export default function ImageGrid({
 
   return (
     <div>
+      
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 auto-rows-[200px] md:auto-rows-[250px]">
         {images.map((img, index) => {

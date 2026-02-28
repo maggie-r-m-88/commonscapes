@@ -125,7 +125,7 @@ export default function ImageGrid({ featuredImage, images }: ImageGridProps) {
       >
         {/* Faded logo watermark */}
         <svg
-          width="260" height="260"
+          width="190" height="190"
           viewBox="0 0 400 400"
           className="absolute -bottom-10 -right-10 opacity-[0.3] text-white"
           fill="currentColor"

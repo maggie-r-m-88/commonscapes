@@ -10,8 +10,10 @@ export default function Header() {
   const isHome = pathname === "/";
 
   return (
-    <header className={`py-4 w-full ${isHome ? "bg-pattern" : ""}`}>
-      <div className="max-w-7xl mx-auto px-6">
+    <header
+      className={`sticky top-0 z-50 w-full py-4 shadow bg-white`}
+    >
+      <div className="max-w-8xl mx-auto px-6 ">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center no-underline">

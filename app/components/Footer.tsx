@@ -1,7 +1,7 @@
 export default function Footer() {
     return (
          <footer className="py-12 text-center text-gray-400 text-sm w-full">
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-7xl xl:max-w-5xl  mx-auto px-8">
           <p>Built by hand, with care. All images sourced from open cultural archives.</p>
           <p className="mt-4">
             <a

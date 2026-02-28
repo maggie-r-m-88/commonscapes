@@ -48,7 +48,7 @@ export default function HomeExplore() {
   if (isLoading) {
     return (
       <section className="py-16">
-        <div className="max-w-7xl mx-auto px-8 text-center">
+        <div className="max-w-7xl xl:max-w-5xl  mx-auto px-8 text-center">
           <Loader />
         </div>
       </section>
@@ -58,7 +58,7 @@ export default function HomeExplore() {
   if (error) {
     return (
       <section className="py-16">
-        <div className="max-w-7xl mx-auto px-8 text-center">
+        <div className="max-w-7xl xl:max-w-5xl  mx-auto px-8 text-center">
           <p className="text-gray-600">Failed to load images</p>
         </div>
       </section>

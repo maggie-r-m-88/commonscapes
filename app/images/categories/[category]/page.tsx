@@ -65,13 +65,12 @@ export default function CategoryPage() {
   const total = data?.total || 0;
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
-      <h1 className="text-2xl font-semibold mb-6 capitalize">{decodedCategory}</h1>
+    <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
+      <h1 className="text-xl font-semibold mb-6 capitalize">{decodedCategory}</h1>
 
       {/* Render subcategories on first page */}
       {page === 1 && subcategories?.categories?.length > 0 && (
         <div className="mb-10">
-          <h2 className="text-xl font-medium mb-4">Subcategories</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {subcategories.categories.map((sub: Subcategory) => (
               <button
