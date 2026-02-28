@@ -8,7 +8,7 @@ export default function BackButton() {
   return (
     <button
       onClick={() => router.back()}
-      className="w-full font-medium flex items-center justify-center gap-2 px-4 py-2 text-gray-700 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+      className="w-full font-medium flex items-center justify-center gap-2 px-4 py-2 text-gray-700 bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer"
     >
       <svg
         className="w-5 h-5"

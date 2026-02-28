@@ -162,7 +162,7 @@ export default function ImageDetailPage() {
                       href={image.license_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline font-medium"
+                      className="text-[#3F7A9D] hover:underline font-medium"
                     >
                       {image.license_name}
                     </a>

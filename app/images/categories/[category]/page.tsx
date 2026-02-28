@@ -65,7 +65,7 @@ export default function CategoryPage() {
   const total = data?.total || 0;
 
   return (
-    <div class="bg-pattern w-full">
+    <div className="bg-pattern w-full">
       <div className="max-w-7xl xl:max-w-5xl  mx-auto p-8">
         <h1 className="text-xl font-semibold mb-6 capitalize">{decodedCategory}</h1>
 

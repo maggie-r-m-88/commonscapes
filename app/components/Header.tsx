@@ -18,7 +18,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center no-underline">
             <Logo />
-            <div className="logo text-xl font-semibold font-archivo tracking-tight ml-2">
+            <div className="logo text-[1.06em] font-semibold font-archivo tracking-tight ml-2">
               commonscapes
             </div>
           </Link>
