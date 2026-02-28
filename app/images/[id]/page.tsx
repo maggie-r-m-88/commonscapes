@@ -78,9 +78,9 @@ export default function ImageDetailPage() {
                     href={image.info_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#657B75] hover:bg-[#444B4B] text-white rounded-lg transition-colors shadow-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#657B75] hover:bg-[#000] text-white rounded-lg transition-colors shadow-sm"
                   >
-                                        <svg
+                    <svg
                       className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
@@ -101,7 +101,7 @@ export default function ImageDetailPage() {
                 <BackButton />
               </div>
 
-                            {/* Taxonomy */}
+              {/* Taxonomy */}
               {taxonomy.length > 0 && (
                 <div className="p-6 border-b border-gray-200">
                   <div className="text-xs uppercase text-gray-500 mb-4">Categories</div>
@@ -128,7 +128,7 @@ export default function ImageDetailPage() {
                 </div>
               )}
 
-                            {/* Tags */}
+              {/* Tags */}
               {tags.length > 0 && (
                 <div className="p-6 border-b border-gray-200">
                   <div className="text-xs uppercase text-gray-500 mb-4">Tags</div>

@@ -53,7 +53,7 @@ function PillPagination({
         <button
           onClick={() => goToPage(page - 1)}
           disabled={page === 1}
-          className="flex items-center gap-2 px-4 py-2.5 bg-white font-semibold border-r border-[#e0ddd6] shadow hover:shadow-md transition-shadow disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#555]"
+          className="flex items-center gap-2 px-4 py-2.5 bg-white font-semibold border-r border-[#e0ddd6] shadow hover:shadow-md transition-shadow disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#555] cursor-pointer"
         
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +82,7 @@ function PillPagination({
         <button
           onClick={() => goToPage(page + 1)}
           disabled={page === totalPages}
-          className="flex items-center gap-2 px-4 py-2.5 bg-white font-semibold text-[#555] border-l border-[#e0ddd6] transition-colors duration-150 hover:bg-[#1c1c1e] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#555]"
+          className="flex items-center gap-2 px-4 py-2.5 bg-white font-semibold text-[#555] border-l border-[#e0ddd6] transition-colors duration-150 hover:bg-[#1c1c1e] hover:text-white disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#555] cursor-pointer"
         >
           Next
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
